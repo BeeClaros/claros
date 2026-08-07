@@ -1,0 +1,882 @@
+/* ================================================================
+   EDITORIAL THEME - v5
+   Namespace: --ed-* / .editorial-theme
+   Architectural · Technological · Precise
+   ================================================================ */
+
+/* ── Keyframes ─────────────────────────────────────────────────── */
+@keyframes ed-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ed-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ed-line-draw-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes ed-line-draw-y {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@keyframes ed-number-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ed-tick {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Root theme ─────────────────────────────────────────────────── */
+.editorial-theme {
+  /* Backgrounds */
+  --ed-bg-primary:     #F3F1EB;
+  --ed-bg-secondary:   #E8E5DD;
+  --ed-bg-elevated:    #EDEAE3;
+
+  /* Text */
+  --ed-text-primary:   #171717;
+  --ed-text-secondary: #5B5B56;
+  --ed-text-muted:     #8A8A84;
+  --ed-text-faint:     #B5B2A9;
+
+  /* Borders & lines */
+  --ed-line:           #D4D0C6;
+  --ed-line-subtle:    rgba(23, 23, 23, 0.06);
+  --ed-line-strong:    rgba(23, 23, 23, 0.14);
+
+  /* Accent - deep teal */
+  --ed-accent:         #1A6B5A;
+  --ed-accent-hover:   #145A4B;
+  --ed-accent-soft:    rgba(26, 107, 90, 0.07);
+  --ed-accent-medium:  rgba(26, 107, 90, 0.14);
+
+  /* Secondary accent - muted terracotta (very rare) */
+  --ed-secondary:      #9B4D3A;
+
+  /* Dot grid */
+  --ed-dot:            rgba(23, 23, 23, 0.08);
+  --ed-dot-size:       1px;
+  --ed-dot-gap:        28px;
+
+  /* Layout */
+  --ed-content-max:    1440px;
+  --ed-nav-h:          72px;
+  --ed-nav-h-sm:       60px;
+  --ed-radius:         3px;
+
+  /* Easing */
+  --ed-ease:           cubic-bezier(0.22, 1, 0.36, 1);
+  --ed-ease-slow:      cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Typography */
+  font-family: var(--font-ed-sans), 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ed-text-primary);
+  background-color: var(--ed-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.editorial-theme *,
+.editorial-theme *::before,
+.editorial-theme *::after {
+  box-sizing: border-box;
+}
+
+/* ── Container ──────────────────────────────────────────────────── */
+.ed-container {
+  width: 100%;
+  max-width: var(--ed-content-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* ── Grid ───────────────────────────────────────────────────────── */
+.ed-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 1.6vw, 1.75rem);
+}
+
+/* ── Dot grid background ───────────────────────────────────────── */
+.ed-dotgrid {
+  position: relative;
+}
+
+.ed-dotgrid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--ed-dot) var(--ed-dot-size), transparent var(--ed-dot-size));
+  background-size: var(--ed-dot-gap) var(--ed-dot-gap);
+  background-position: center center;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 15%, rgba(0,0,0,0.6) 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 15%, rgba(0,0,0,0.6) 85%, transparent 100%);
+}
+
+.ed-dotgrid > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Navigation ─────────────────────────────────────────────────── */
+.ed-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--ed-nav-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 300ms var(--ed-ease),
+              border-color 300ms var(--ed-ease),
+              backdrop-filter 300ms var(--ed-ease);
+}
+
+.ed-nav.scrolled {
+  background: rgba(243, 241, 235, 0.92);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom-color: var(--ed-line);
+}
+
+.ed-nav-wordmark {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--ed-text-primary);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.ed-nav-link {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--ed-text-muted);
+  text-decoration: none;
+  position: relative;
+  transition: color 200ms var(--ed-ease);
+  padding: 4px 0;
+}
+
+.ed-nav-link:hover {
+  color: var(--ed-text-primary);
+}
+
+.ed-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ed-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 400ms var(--ed-ease);
+}
+
+.ed-nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.ed-nav-contact {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ed-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 200ms var(--ed-ease);
+  border-bottom: 1px solid var(--ed-accent);
+  padding-bottom: 2px;
+}
+
+.ed-nav-contact:hover {
+  color: var(--ed-accent-hover);
+  border-color: var(--ed-accent-hover);
+}
+
+/* ── Typography ─────────────────────────────────────────────────── */
+.ed-serif {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+}
+
+.ed-sans {
+  font-family: var(--font-ed-sans), system-ui, sans-serif;
+}
+
+.ed-mono {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+}
+
+.ed-hero-heading {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: clamp(3.5rem, 6.5vw, 6rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+  color: var(--ed-text-primary);
+  margin: 0;
+}
+
+.ed-section-heading {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  color: var(--ed-text-primary);
+  margin: 0;
+}
+
+.ed-statement {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+  font-weight: 400;
+  color: var(--ed-text-primary);
+  margin: 0;
+}
+
+.ed-lead {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
+  line-height: 1.7;
+  letter-spacing: -0.008em;
+  font-weight: 400;
+  color: var(--ed-text-secondary);
+  max-width: 38rem;
+  margin: 0;
+}
+
+.ed-body {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  letter-spacing: -0.008em;
+  font-weight: 400;
+  color: var(--ed-text-secondary);
+  margin: 0;
+}
+
+.ed-label {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--ed-text-muted);
+}
+
+.ed-number {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--ed-text-faint);
+  letter-spacing: 0.05em;
+}
+
+.ed-section-number {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  color: var(--ed-accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ed-section-number::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--ed-accent);
+  opacity: 0.4;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.ed-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding-inline: 28px;
+  border-radius: var(--ed-radius);
+  background: var(--ed-text-primary);
+  color: var(--ed-bg-primary);
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 200ms var(--ed-ease), transform 200ms var(--ed-ease);
+  white-space: nowrap;
+}
+
+.ed-btn-primary:hover {
+  background: var(--ed-accent);
+  transform: translateY(-1px);
+}
+
+.ed-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--ed-text-secondary);
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  padding: 0;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--ed-line);
+  cursor: pointer;
+  transition: border-color 300ms var(--ed-ease),
+              color 300ms var(--ed-ease);
+}
+
+.ed-btn-secondary:hover {
+  color: var(--ed-accent);
+  border-bottom-color: var(--ed-accent);
+}
+
+.ed-arrow {
+  display: inline-block;
+  transition: transform 300ms var(--ed-ease);
+  font-size: 0.9em;
+}
+
+.ed-btn-primary:hover .ed-arrow,
+.ed-btn-secondary:hover .ed-arrow,
+.ed-nav-contact:hover .ed-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Section spacing ────────────────────────────────────────────── */
+.ed-section {
+  padding-block: clamp(5.5rem, 13vw, 12.5rem);
+  position: relative;
+}
+
+.ed-section-sm {
+  padding-block: clamp(3.5rem, 8vw, 7rem);
+  position: relative;
+}
+
+/* ── Dividers ──────────────────────────────────────────────────── */
+.ed-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--ed-line);
+}
+
+.ed-divider-accent {
+  width: 100%;
+  height: 1px;
+  background: var(--ed-accent);
+  opacity: 0.2;
+}
+
+/* ── Crosshair marker ──────────────────────────────────────────── */
+.ed-crosshair {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+
+.ed-crosshair::before,
+.ed-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--ed-accent);
+}
+
+.ed-crosshair::before {
+  width: 12px;
+  height: 1px;
+}
+
+.ed-crosshair::after {
+  width: 1px;
+  height: 12px;
+}
+
+/* ── Coordinate label ──────────────────────────────────────────── */
+.ed-coord {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--ed-text-faint);
+  user-select: none;
+}
+
+/* ── Stage element ─────────────────────────────────────────────── */
+.ed-stage-title {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--ed-text-primary);
+  margin: 0;
+}
+
+.ed-stage-desc {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--ed-text-secondary);
+  margin: 0;
+}
+
+/* ── Value matrix cell ─────────────────────────────────────────── */
+.ed-matrix-cell {
+  padding: 2.25rem 2rem;
+  border: 1px solid var(--ed-line);
+  position: relative;
+  cursor: default;
+  transition: background 300ms var(--ed-ease);
+  overflow: hidden;
+}
+
+.ed-matrix-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--ed-accent);
+  transition: width 500ms var(--ed-ease);
+}
+
+.ed-matrix-cell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background: var(--ed-accent);
+  transition: height 500ms var(--ed-ease) 100ms;
+}
+
+.ed-matrix-cell:hover {
+  background: var(--ed-accent-soft);
+}
+
+.ed-matrix-cell:hover::before {
+  width: 40px;
+}
+
+.ed-matrix-cell:hover::after {
+  height: 40px;
+}
+
+.ed-matrix-cell-number {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--ed-text-faint);
+  margin-bottom: 1.25rem;
+  display: block;
+}
+
+.ed-matrix-cell-title {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ed-text-primary);
+  margin-bottom: 0.6rem;
+}
+
+.ed-matrix-cell-desc {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ed-text-secondary);
+}
+
+/* ── Accent section (was cobalt, now teal) ─────────────────────── */
+.ed-accent-section {
+  background: var(--ed-text-primary);
+  color: var(--ed-bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.ed-accent-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(243, 241, 235, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.ed-accent-section .ed-section-heading,
+.ed-accent-section .ed-statement,
+.ed-accent-section .ed-stage-title {
+  color: var(--ed-bg-primary);
+}
+
+.ed-accent-section .ed-lead,
+.ed-accent-section .ed-body,
+.ed-accent-section .ed-stage-desc {
+  color: rgba(243, 241, 235, 0.7);
+}
+
+.ed-accent-section .ed-label,
+.ed-accent-section .ed-section-number {
+  color: var(--ed-accent);
+}
+
+.ed-accent-section .ed-section-number::after {
+  background: var(--ed-accent);
+}
+
+.ed-accent-section .ed-number {
+  color: rgba(243, 241, 235, 0.3);
+}
+
+.ed-accent-section .ed-btn-primary {
+  background: var(--ed-accent);
+  color: #FFFFFF;
+}
+
+.ed-accent-section .ed-btn-primary:hover {
+  background: var(--ed-accent-hover);
+}
+
+.ed-accent-section .ed-btn-secondary {
+  color: rgba(243, 241, 235, 0.7);
+  border-bottom-color: rgba(243, 241, 235, 0.2);
+}
+
+.ed-accent-section .ed-btn-secondary:hover {
+  color: var(--ed-accent);
+  border-bottom-color: var(--ed-accent);
+}
+
+.ed-accent-section .ed-divider {
+  background: rgba(243, 241, 235, 0.1);
+}
+
+/* ── Stone section ─────────────────────────────────────────────── */
+.ed-stone {
+  background: var(--ed-bg-secondary);
+}
+
+/* ── Scroll reveal ─────────────────────────────────────────────── */
+.ed-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 900ms var(--ed-ease),
+              transform 900ms var(--ed-ease);
+}
+
+.ed-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ed-reveal-delay-1 { transition-delay: 80ms; }
+.ed-reveal-delay-2 { transition-delay: 160ms; }
+.ed-reveal-delay-3 { transition-delay: 240ms; }
+.ed-reveal-delay-4 { transition-delay: 320ms; }
+.ed-reveal-delay-5 { transition-delay: 400ms; }
+.ed-reveal-delay-6 { transition-delay: 480ms; }
+
+/* ── Principle card ────────────────────────────────────────────── */
+.ed-principle {
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--ed-line);
+  position: relative;
+}
+
+.ed-principle::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--ed-accent);
+  transition: width 600ms var(--ed-ease);
+}
+
+.ed-principle:hover::before {
+  width: 48px;
+}
+
+.ed-principle-number {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--ed-text-faint);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.ed-principle-title {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ed-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.ed-principle-desc {
+  font-family: var(--font-ed-sans), sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--ed-text-secondary);
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+.ed-footer {
+  border-top: 1px solid var(--ed-line);
+  padding-block: 3.5rem;
+  font-family: var(--font-ed-sans), sans-serif;
+}
+
+.ed-footer-wordmark {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--ed-text-primary);
+}
+
+.ed-footer-desc {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ed-text-secondary);
+  max-width: 28rem;
+}
+
+.ed-footer-link {
+  font-size: 0.8125rem;
+  color: var(--ed-text-secondary);
+  text-decoration: none;
+  transition: color 200ms var(--ed-ease);
+}
+
+.ed-footer-link:hover {
+  color: var(--ed-text-primary);
+}
+
+.ed-footer-label {
+  font-family: var(--font-ed-mono), 'Courier New', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ed-text-faint);
+  margin-bottom: 0.75rem;
+}
+
+.ed-footer-small {
+  font-size: 0.75rem;
+  color: var(--ed-text-muted);
+}
+
+/* ── Mobile menu overlay ───────────────────────────────────────── */
+.ed-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--ed-bg-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ed-ease);
+}
+
+.ed-mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ed-mobile-menu-link {
+  font-family: var(--font-ed-serif), 'Georgia', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ed-text-primary);
+  text-decoration: none;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--ed-line-subtle);
+  display: block;
+  transition: color 200ms var(--ed-ease);
+}
+
+.ed-mobile-menu-link:hover {
+  color: var(--ed-accent);
+}
+
+/* ── Hamburger ─────────────────────────────────────────────────── */
+.ed-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  position: relative;
+  z-index: 101;
+}
+
+.ed-hamburger span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--ed-text-primary);
+  transition: transform 200ms var(--ed-ease), opacity 200ms var(--ed-ease);
+  position: absolute;
+  left: 4px;
+}
+
+.ed-hamburger span:nth-child(1) { top: 8px; }
+.ed-hamburger span:nth-child(2) { top: 14px; }
+.ed-hamburger span:nth-child(3) { top: 20px; }
+
+.ed-hamburger.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.ed-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.ed-hamburger.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ── Observation card ──────────────────────────────────────────── */
+.ed-obs {
+  padding: 2.5rem 2rem 2.5rem 0;
+  position: relative;
+}
+
+.ed-obs::before {
+  content: '';
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 2px solid var(--ed-accent);
+  transition: height 500ms var(--ed-ease);
+}
+
+.ed-obs:hover::before {
+  height: 28px;
+}
+
+/* ── Reference line ────────────────────────────────────────────── */
+.ed-refline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ed-refline-bar {
+  width: 24px;
+  height: 1px;
+  background: var(--ed-accent);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* ── Mobile overrides ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ed-nav {
+    height: var(--ed-nav-h-sm);
+  }
+
+  .ed-hamburger {
+    display: block;
+  }
+
+  .ed-nav-links-desktop {
+    display: none;
+  }
+
+  .ed-hero-heading {
+    font-size: clamp(2.5rem, 10.5vw, 3.5rem);
+    line-height: 1.06;
+  }
+
+  .ed-section-heading {
+    font-size: clamp(1.875rem, 7.5vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  .ed-statement {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    line-height: 1.28;
+  }
+
+  .ed-dotgrid::before {
+    --ed-dot-gap: 22px;
+  }
+
+  .ed-matrix-cell {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .ed-obs {
+    padding: 1.5rem 0;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ed-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

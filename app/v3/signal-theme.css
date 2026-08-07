@@ -1,0 +1,464 @@
+/* ================================================================
+   SIGNAL THEME - Fully isolated from repository globals
+   Namespace: --signal-* / .signal-theme / .st-*
+   Do not use any variables from globals.css here.
+   ================================================================ */
+
+/* ── Keyframes ─────────────────────────────────────────────────── */
+@keyframes signal-grain {
+  0%, 100% { transform: translate(0, 0); }
+  10%       { transform: translate(-1%, -1%); }
+  20%       { transform: translate(1%, 0%); }
+  30%       { transform: translate(0%, 1%); }
+  40%       { transform: translate(-1%, 0%); }
+  50%       { transform: translate(1%, -1%); }
+  60%       { transform: translate(0%, 1%); }
+  70%       { transform: translate(-1%, 0%); }
+  80%       { transform: translate(1%, 1%); }
+  90%       { transform: translate(0%, -1%); }
+}
+
+@keyframes signal-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes signal-line-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── Root theme ─────────────────────────────────────────────────── */
+.signal-theme {
+  /* Backgrounds */
+  --signal-bg-primary:     #030405;
+  --signal-bg-secondary:   #080A0D;
+  --signal-bg-elevated:    #0D1014;
+  --signal-bg-interactive: #12161C;
+
+  /* Text */
+  --signal-text-primary:   #F2F3EE;
+  --signal-text-secondary: #A3A9B2;
+  --signal-text-muted:     #666E79;
+  --signal-text-faint:     #3F4650;
+
+  /* Lines */
+  --signal-line-subtle:  rgba(242, 243, 238, 0.08);
+  --signal-line-visible: rgba(242, 243, 238, 0.16);
+  --signal-line-active:  rgba(242, 243, 238, 0.28);
+
+  /* Accent - acid lime */
+  --signal-accent:       #D5FF4F;
+  --signal-accent-soft:  rgba(213, 255, 79, 0.14);
+  --signal-accent-faint: rgba(213, 255, 79, 0.06);
+
+  /* System - cool blue */
+  --signal-system:      #65AFFF;
+  --signal-system-soft: rgba(101, 175, 255, 0.12);
+
+  /* Human - coral */
+  --signal-human:      #FF795F;
+  --signal-human-soft: rgba(255, 121, 95, 0.13);
+
+  /* Particles */
+  --signal-particle-idle:     rgba(242, 243, 238, 0.18);
+  --signal-particle-visible:  rgba(242, 243, 238, 0.42);
+  --signal-particle-priority: #D5FF4F;
+  --signal-particle-system:   #65AFFF;
+  --signal-particle-human:    #FF795F;
+
+  /* Geometry */
+  --signal-radius-small:  4px;
+  --signal-radius-medium: 8px;
+  --signal-radius-large:  14px;
+
+  /* Layout */
+  --signal-content-max: 1440px;
+  --signal-text-max:    620px;
+  --signal-nav-h:       76px;
+  --signal-nav-h-sm:    64px;
+
+  /* Easing */
+  --signal-ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --signal-ease-swarm:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Typography - do not inherit repo fonts */
+  font-family: var(--font-signal-sans), system-ui, -apple-system, sans-serif;
+  color: var(--signal-text-primary);
+  background-color: var(--signal-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.signal-theme * {
+  box-sizing: border-box;
+}
+
+/* ── Container ──────────────────────────────────────────────────── */
+.signal-container {
+  width: 100%;
+  max-width: var(--signal-content-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+}
+
+/* ── Grid ───────────────────────────────────────────────────────── */
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 1.8vw, 2rem);
+}
+
+/* ── Background treatment ───────────────────────────────────────── */
+.signal-page-bg {
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(255, 255, 255, 0.035),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #050607 0%,
+      #030405 55%,
+      #07090C 100%
+    );
+  position: relative;
+}
+
+/* Grain overlay */
+.signal-grain::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 1;
+  animation: signal-grain 8s steps(10) infinite;
+}
+
+/* ── Navigation ─────────────────────────────────────────────────── */
+.signal-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--signal-nav-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 240ms var(--signal-ease-out),
+              border-color 240ms var(--signal-ease-out),
+              backdrop-filter 240ms var(--signal-ease-out);
+}
+
+.signal-nav.scrolled {
+  background: rgba(3, 4, 5, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--signal-line-subtle);
+}
+
+.signal-nav-logo {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--signal-text-primary);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.signal-nav-link {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--signal-text-secondary);
+  text-decoration: none;
+  transition: color 180ms var(--signal-ease-out);
+}
+
+.signal-nav-link:hover {
+  color: var(--signal-text-primary);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.signal-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 48px;
+  padding-block: 0;
+  padding-inline: 22px;
+  border-radius: 6px;
+  background: var(--signal-accent);
+  color: #090B0D;
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 200ms var(--signal-ease-out);
+  white-space: nowrap;
+}
+
+.signal-btn-primary:hover {
+  background: #E0FF72;
+}
+
+.signal-btn-primary:hover .signal-arrow {
+  transform: translateX(3px);
+}
+
+.signal-arrow {
+  display: inline-block;
+  transition: transform 200ms var(--signal-ease-out);
+}
+
+.signal-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--signal-text-primary);
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid var(--signal-line-active);
+  padding-block: 6px;
+  padding-inline: 0;
+  cursor: pointer;
+  transition: border-color 200ms var(--signal-ease-out),
+              color 200ms var(--signal-ease-out);
+}
+
+.signal-btn-secondary:hover {
+  color: var(--signal-accent);
+  border-bottom-color: var(--signal-accent);
+}
+
+/* ── Labels ─────────────────────────────────────────────────────── */
+.signal-label {
+  font-family: var(--font-signal-mono), monospace;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--signal-text-muted);
+}
+
+/* ── Typography ─────────────────────────────────────────────────── */
+.signal-headline-hero {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: clamp(4.5rem, 8.2vw, 8.5rem);
+  line-height: 0.91;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+  color: var(--signal-text-primary);
+  margin: 0;
+}
+
+.signal-headline-major {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: clamp(3.25rem, 5.7vw, 6rem);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+  color: var(--signal-text-primary);
+  margin: 0;
+}
+
+.signal-headline-section {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: clamp(2.25rem, 3.8vw, 4.25rem);
+  line-height: 1;
+  letter-spacing: -0.038em;
+  font-weight: 500;
+  color: var(--signal-text-primary);
+  margin: 0;
+}
+
+.signal-lead {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: clamp(1.125rem, 1.45vw, 1.375rem);
+  line-height: 1.48;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+  color: var(--signal-text-secondary);
+  max-width: 38rem;
+  margin: 0;
+}
+
+.signal-body {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+  font-weight: 400;
+  color: var(--signal-text-secondary);
+  max-width: 34rem;
+  margin: 0;
+}
+
+/* ── Accent text ────────────────────────────────────────────────── */
+.signal-accent-text {
+  color: var(--signal-accent);
+}
+
+/* ── Section spacing ────────────────────────────────────────────── */
+.signal-section {
+  padding-block: clamp(7rem, 13vw, 13rem);
+  position: relative;
+  z-index: 10;
+}
+
+.signal-section-short {
+  padding-block: clamp(4.5rem, 8vw, 8rem);
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Section backgrounds ────────────────────────────────────────── */
+.signal-bg-glass {
+  background: rgba(3, 4, 5, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.signal-bg-solid {
+  background: var(--signal-bg-secondary);
+}
+
+.signal-bg-elevated {
+  background: var(--signal-bg-elevated);
+}
+
+/* ── Divider ────────────────────────────────────────────────────── */
+.signal-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--signal-line-subtle);
+}
+
+/* ── Stage card ─────────────────────────────────────────────────── */
+.signal-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.signal-stage-number {
+  font-family: var(--font-signal-mono), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--signal-text-faint);
+}
+
+.signal-stage-name {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--signal-text-primary);
+}
+
+.signal-stage-desc {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+  color: var(--signal-text-muted);
+}
+
+/* ── Entry point card ───────────────────────────────────────────── */
+.signal-entry {
+  padding: 1.75rem;
+  border: 1px solid var(--signal-line-subtle);
+  border-radius: var(--signal-radius-large);
+  background: var(--signal-bg-elevated);
+  transition: border-color 220ms var(--signal-ease-out),
+              background 220ms var(--signal-ease-out);
+  cursor: default;
+}
+
+.signal-entry:hover {
+  border-color: var(--signal-line-visible);
+  background: var(--signal-bg-interactive);
+}
+
+.signal-entry-label {
+  font-family: var(--font-signal-mono), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--signal-text-faint);
+  margin-bottom: 0.75rem;
+}
+
+.signal-entry-text {
+  font-family: var(--font-signal-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.4;
+  color: var(--signal-text-primary);
+}
+
+/* ── Mobile overrides ───────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .signal-nav {
+    height: var(--signal-nav-h-sm);
+  }
+
+  .signal-headline-hero {
+    font-size: clamp(3rem, 13.5vw, 4.25rem);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+  }
+
+  .signal-headline-major {
+    font-size: clamp(2.5rem, 10.5vw, 3.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+
+  .signal-headline-section {
+    font-size: clamp(2rem, 8.5vw, 2.75rem);
+    line-height: 1;
+  }
+
+  .signal-lead {
+    font-size: 1.0625rem;
+    line-height: 1.52;
+  }
+
+  .signal-body {
+    font-size: 1rem;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .signal-grain::after {
+    animation: none;
+  }
+}

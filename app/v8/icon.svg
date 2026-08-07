@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Antennae -->
+  <g fill="none" stroke="#262A27" stroke-width="2.2" stroke-linecap="round">
+    <path d="M26 18 L22 10"/>
+    <path d="M38 18 L42 10"/>
+  </g>
+  <!-- Wings — elongated open C (wider than tall) -->
+  <g fill="none" stroke="#262A27" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M22 22 L2 22 L7 32 L20 32"/>
+    <path d="M18 25 L6 25 L9 30"/>
+    <path d="M42 22 L62 22 L57 32 L44 32"/>
+    <path d="M46 25 L58 25 L55 30"/>
+  </g>
+  <!-- Head hex -->
+  <path d="M26 16 L38 16 L42 22 L38 28 L26 28 L22 22 Z" fill="#262A27"/>
+  <!-- Abdomen hex -->
+  <path d="M32 30 L44 37 L44 50 L32 58 L20 50 L20 37 Z" fill="#262A27"/>
+  <!-- Lime accents -->
+  <path d="M32 36 L37 43 L27 43 Z" fill="#C7F000"/>
+  <rect x="26" y="46" width="12" height="3.2" rx="0.4" fill="#C7F000"/>
+  <rect x="26" y="51" width="12" height="3.2" rx="0.4" fill="#C7F000"/>
+</svg>
