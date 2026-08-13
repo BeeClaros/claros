@@ -51,7 +51,7 @@
   /* Accent - technical lime */
   --v8-lime:         #C7F000;
   --v8-lime-hover:   #B5DD00;
-  --v8-lime-deep:    #6F8A00; /* lime text on light backgrounds */
+  --v8-lime-deep:    #6B9A12; /* accent text on light (was #6F8A00) */
   --v8-lime-pale:    #EEF9C2; /* very pale lime block */
   --v8-lime-soft:    rgba(199, 240, 0, 0.12);
 

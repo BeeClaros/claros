@@ -90,8 +90,10 @@ export default function HowWeWork() {
             className="v8-lead v8-reveal v8-reveal-1"
             style={{ marginTop: "1.5rem", maxWidth: "38rem", color: "var(--v8-on-dark-secondary)" }}
           >
-            We work with internal teams to combine business knowledge, human
-            judgement and AI. Three phases, one clear path.
+            We work with internal teams, combining business knowledge, human
+            judgement and AI capability. Assessment sets the priorities. Build
+            transforms products and processes. Continuous Delivery supports
+            adoption, governance and expansion.
           </p>
         </div>
 

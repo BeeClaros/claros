@@ -6,7 +6,7 @@ import { motion, useInView, useReducedMotion, type Variants } from "framer-motio
 const PILLARS = [
   {
     title: "AI Strategy",
-    copy: "Fast, focused assessment. No 6-month study. We find where AI creates real business value and build the roadmap to get there.",
+    copy: "Focused assessment of where AI can create measurable business value, what it requires and what to prioritise first.",
     mark: "strategy",
   },
   {
@@ -16,12 +16,12 @@ const PILLARS = [
   },
   {
     title: "Process Transformation",
-    copy: "Automate repetitive work. Improve visibility across operations. Reduce cost and free teams for higher-value decisions.",
+    copy: "Reduce repetitive work, improve operational visibility and support better decisions where AI can make a meaningful difference.",
     mark: "process",
   },
   {
     title: "People & AI Culture",
-    copy: "Training, adoption and change management. AI only creates value when teams use it - we make sure they do.",
+    copy: "Training, adoption and change support designed around the teams using the solution. We build adoption into delivery from the start.",
     mark: "people",
   },
 ];
@@ -106,20 +106,23 @@ export default function WhatWeDo() {
             className="v8-section-title"
             variants={fade}
             style={{
-              maxWidth: "18ch",
+              maxWidth: "26ch",
               fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)",
             }}
           >
-            You have a choice. Transform now{" "}
-            <span style={{ color: "var(--v8-lime-deep)" }}>or fall behind.</span>
+            AI creates value when it solves the{" "}
+            <span style={{ color: "var(--v8-lime-deep)" }}>
+              right business problems.
+            </span>
           </motion.h2>
           <motion.p
             className="v8-lead"
             variants={fade}
             style={{ marginTop: "1.5rem", maxWidth: "38rem" }}
           >
-            As AI reshapes every industry, the gap between companies that adopt
-            and those that wait grows every quarter.
+            We work across strategy, products, processes and people — especially
+            where AI activity is fragmented, priorities are unclear or
+            implementation needs to move beyond isolated experiments.
           </motion.p>
         </motion.div>
 

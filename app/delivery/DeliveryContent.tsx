@@ -9,7 +9,7 @@ const ADOPTION_ITEMS = [
   },
   {
     title: "Team support",
-    copy: "Ongoing guidance for the teams using new tools and workflows. Problems are caught early and resolved before momentum stalls.",
+    copy: "Ongoing guidance for the teams using new tools and workflows. We help teams identify issues early and resolve them before momentum stalls.",
   },
   {
     title: "Expansion planning",
@@ -35,8 +35,8 @@ const CULTURE_ITEMS = [
   },
   {
     num: "04",
-    title: "AI-first mindset",
-    copy: "Moving teams from seeing AI as a tool to using AI as a default part of how they think and work.",
+    title: "AI-confident teams",
+    copy: "Help teams understand where AI improves their work, where human judgement remains essential and how to use AI responsibly and effectively.",
   },
 ];
 
@@ -51,7 +51,7 @@ const GOVERNANCE_ITEMS = [
   },
   {
     title: "Performance monitoring",
-    copy: "Automated checks to ensure AI systems continue to perform accurately and reliably over time.",
+    copy: "Ongoing monitoring helps detect performance issues, drift and reliability concerns as systems evolve.",
   },
   {
     title: "Continuous improvement",
@@ -141,8 +141,8 @@ export default function DeliveryContent() {
               color: "var(--v8-on-dark-secondary)",
             }}
           >
-            The only thing more dangerous than ignoring AI? Implementing it and
-            forgetting about your people.
+            Technology alone does not create adoption. Teams need the skills,
+            confidence and support to use AI effectively in their work.
           </p>
         </div>
 

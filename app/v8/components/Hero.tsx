@@ -89,8 +89,8 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
               >
-                AI is reshaping every industry.{" "}
-                <span className="v8-accent-text">We make sure you lead.</span>
+                Turn AI into measurable{" "}
+                <span className="v8-accent-text">business value.</span>
               </motion.h1>
 
               <motion.p
@@ -100,8 +100,9 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
               >
-                Strategy, implementation and adoption - from first assessment to
-                lasting business value.
+                We help organisations identify where AI is worth using, implement
+                practical solutions that fit existing teams and systems, and build
+                the adoption and governance needed to scale what works.
               </motion.p>
 
               <motion.div
@@ -117,7 +118,7 @@ export default function Hero() {
                 transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
               >
                 <a href="mailto:hello@enxame.ai" className="v8-btn-primary">
-                  Talk to us <span className="v8-arrow">&rarr;</span>
+                  Discuss your priorities <span className="v8-arrow">&rarr;</span>
                 </a>
               </motion.div>
             </motion.div>

@@ -28,23 +28,23 @@ const DELIVERABLES = [
 const PROCESS = [
   {
     num: "01",
-    title: "Stakeholder interviews",
-    copy: "We speak with leadership, operational teams and technical staff to understand priorities, pain points and existing initiatives.",
+    title: "Executive and stakeholder alignment",
+    copy: "We work with leadership, operational teams and technical stakeholders to understand business priorities, pain points, existing AI activity and strategic context.",
   },
   {
     num: "02",
-    title: "Process mapping",
-    copy: "We map key workflows to identify where time is lost, decisions are delayed and AI could have the strongest impact.",
+    title: "Process and opportunity mapping",
+    copy: "We examine priority workflows and decisions to identify where AI could create meaningful business value.",
   },
   {
     num: "03",
-    title: "Opportunity scoring",
-    copy: "Each opportunity is evaluated on business value, technical feasibility and organisational readiness.",
+    title: "Readiness, risk and opportunity scoring",
+    copy: "We assess business impact, feasibility, data and technology readiness, dependencies and relevant governance or risk considerations.",
   },
   {
     num: "04",
-    title: "Roadmap delivery",
-    copy: "You receive a clear assessment report with prioritised recommendations and a practical path forward.",
+    title: "Prioritised roadmap",
+    copy: "You leave with clear priorities, recommended next steps, ownership and a practical path from opportunity to implementation.",
   },
 ];
 
@@ -150,8 +150,9 @@ export default function AssessmentContent() {
               color: "var(--v8-on-dark-secondary)",
             }}
           >
-            A focused engagement - typically 2 to 4 weeks - that moves fast
-            without cutting corners.
+            A focused engagement shaped around your organisation, priorities and
+            level of complexity, with the scope and depth needed to support
+            confident decisions.
           </p>
         </div>
 

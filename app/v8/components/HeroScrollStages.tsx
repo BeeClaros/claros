@@ -80,7 +80,7 @@ function StageBlock({
         <p className="v8-hero-stage-phrase">{stage.phrase}</p>
         {stage.showCta ? (
           <a href="mailto:hello@enxame.ai" className="v8-btn-primary v8-hero-stage-cta">
-            Talk to us <span className="v8-arrow">&rarr;</span>
+            Discuss your priorities <span className="v8-arrow">&rarr;</span>
           </a>
         ) : null}
       </motion.div>

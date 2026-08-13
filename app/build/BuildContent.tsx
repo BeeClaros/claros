@@ -53,7 +53,7 @@ const PRINCIPLES = [
   {
     num: "02",
     title: "Practical delivery",
-    copy: "Solutions must work inside existing operations from day one.",
+    copy: "Solutions are designed to work inside existing operations, systems and constraints.",
   },
   {
     num: "03",
@@ -140,7 +140,8 @@ export default function BuildContent() {
             className="v8-lead v8-reveal v8-reveal-1"
             style={{ marginTop: "1.25rem", maxWidth: "34rem" }}
           >
-            Automate, optimise and reduce friction across every business function.
+            Apply AI where it can reduce repetitive work, improve decisions and
+            remove friction across priority business functions.
           </p>
         </div>
 
