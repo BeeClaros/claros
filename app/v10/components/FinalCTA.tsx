@@ -71,7 +71,7 @@ export default function FinalCTA() {
               flexWrap: "wrap",
             }}
           >
-            <a href="mailto:hello@enxame.ai" className="v10-btn-dark">
+            <a href="mailto:hello@beeclaros.com" className="v10-btn-dark">
               Discuss your business <span className="v10-arrow">&rarr;</span>
             </a>
             <a href="#assessment" className="v10-btn-text">

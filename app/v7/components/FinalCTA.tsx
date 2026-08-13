@@ -80,7 +80,7 @@ export default function FinalCTA() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
           >
-            <a href="mailto:hello@enxame.ai" className="hv-btn-primary">
+            <a href="mailto:hello@beeclaros.com" className="hv-btn-primary">
               Discuss your business <span className="hv-arrow">&rarr;</span>
             </a>
             <a href="#assessment" className="hv-btn-text">

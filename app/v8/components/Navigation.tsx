@@ -95,7 +95,7 @@ export default function Navigation() {
               </a>
             ))}
             <a
-              href="mailto:hello@enxame.ai"
+              href="mailto:hello@beeclaros.com"
               className="v8-nav-contact"
             >
               Contact <span className="v8-arrow">&rarr;</span>
@@ -127,7 +127,7 @@ export default function Navigation() {
           </a>
         ))}
         <a
-          href="mailto:hello@enxame.ai"
+          href="mailto:hello@beeclaros.com"
           className="v8-mobile-link"
         >
           Contact

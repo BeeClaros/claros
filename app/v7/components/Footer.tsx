@@ -26,8 +26,8 @@ export default function Footer() {
             <a className="hv-footer-link" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
               LinkedIn
             </a>
-            <a className="hv-footer-link" href="mailto:hello@enxame.ai">
-              hello@enxame.ai
+            <a className="hv-footer-link" href="mailto:hello@beeclaros.com">
+              hello@beeclaros.com
             </a>
             <a className="hv-footer-link" href="#">
               Privacy

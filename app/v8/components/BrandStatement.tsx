@@ -66,7 +66,7 @@ export default function BrandStatement() {
 
           <div className="v8-reveal v8-reveal-3" style={{ marginTop: "2.5rem" }}>
             <a
-              href="mailto:hello@enxame.ai"
+              href="mailto:hello@beeclaros.com"
               className="v8-btn-dark"
               style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
             >

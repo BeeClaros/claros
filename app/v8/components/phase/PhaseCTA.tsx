@@ -16,7 +16,7 @@ export default function PhaseCTA({
   title,
   lead,
   ctaLabel,
-  ctaHref = "mailto:hello@enxame.ai",
+  ctaHref = "mailto:hello@beeclaros.com",
   imageSrc = "/v8/bg-swarm.png",
 }: Props) {
   const ref = useRef<HTMLElement>(null);

@@ -146,7 +146,7 @@ export default function FinalCTA() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <a href="mailto:hello@enxame.com" className="pt-btn-primary">
+            <a href="mailto:hello@beeclaros.com" className="pt-btn-primary">
               Book an intro call <span className="pt-arrow">&rarr;</span>
             </a>
           </motion.div>

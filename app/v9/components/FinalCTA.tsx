@@ -64,7 +64,7 @@ export default function FinalCTA() {
             className="ae-reveal ae-reveal-1"
             style={{ marginTop: "2.5rem", display: "flex", alignItems: "center", gap: "1.75rem", flexWrap: "wrap" }}
           >
-            <a href="mailto:hello@enxame.ai" className="ae-btn-primary ae-btn-night">
+            <a href="mailto:hello@beeclaros.com" className="ae-btn-primary ae-btn-night">
               Discuss your business <span className="ae-arrow">&rarr;</span>
             </a>
             <a href="#assessment" className="ae-btn-text">

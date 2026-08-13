@@ -46,8 +46,8 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:hello@enxame.ai" className="v8-footer-link">
-                    hello@enxame.ai
+                  <a href="mailto:hello@beeclaros.com" className="v8-footer-link">
+                    hello@beeclaros.com
                   </a>
                 </li>
               </ul>

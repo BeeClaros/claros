@@ -79,7 +79,7 @@ function StageBlock({
         </h2>
         <p className="v8-hero-stage-phrase">{stage.phrase}</p>
         {stage.showCta ? (
-          <a href="mailto:hello@enxame.ai" className="v8-btn-primary v8-hero-stage-cta">
+          <a href="mailto:hello@beeclaros.com" className="v8-btn-primary v8-hero-stage-cta">
             Discuss your priorities <span className="v8-arrow">&rarr;</span>
           </a>
         ) : null}

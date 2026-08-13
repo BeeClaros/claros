@@ -117,7 +117,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
               >
-                <a href="mailto:hello@enxame.ai" className="v8-btn-primary">
+                <a href="mailto:hello@beeclaros.com" className="v8-btn-primary">
                   Discuss your priorities <span className="v8-arrow">&rarr;</span>
                 </a>
               </motion.div>

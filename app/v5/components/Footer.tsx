@@ -73,8 +73,8 @@ export default function Footer() {
             >
               LinkedIn
             </a>
-            <a href="mailto:hello@enxame.ai" className="ed-footer-link">
-              hello@enxame.ai
+            <a href="mailto:hello@beeclaros.com" className="ed-footer-link">
+              hello@beeclaros.com
             </a>
             <a href="#" className="ed-footer-link">
               Privacy

@@ -235,7 +235,7 @@ export default function HowWeWork() {
         </p>
 
         <div className="v8-reveal v8-reveal-1" style={{ marginTop: "2rem" }}>
-          <a href="mailto:hello@enxame.ai" className="v8-btn-lime">
+          <a href="mailto:hello@beeclaros.com" className="v8-btn-lime">
             Discuss your business <span className="v8-arrow">&rarr;</span>
           </a>
         </div>
