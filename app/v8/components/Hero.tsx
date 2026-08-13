@@ -89,8 +89,8 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
               >
-                Turn AI into measurable{" "}
-                <span className="v8-accent-text">business value.</span>
+                The clarity to choose.{" "}
+                <span className="v8-accent-text">The discipline to build.</span>
               </motion.h1>
 
               <motion.p
@@ -100,9 +100,8 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
               >
-                We help organisations identify where AI is worth using, implement
-                practical solutions that fit existing teams and systems, and build
-                the adoption and governance needed to scale what works.
+                We help you decide what matters, build what fits, and keep it
+                working with your teams.
               </motion.p>
 
               <motion.div

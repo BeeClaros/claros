@@ -9,7 +9,7 @@ const LEFT_NAV = [
   { label: "How we work", href: "/#how-we-work" },
 ];
 
-const RIGHT_NAV = [
+const PHASE_NAV = [
   { label: "Assessment", href: "/assessment" },
   { label: "Build", href: "/build" },
   { label: "Delivery", href: "/delivery" },
@@ -55,7 +55,7 @@ export default function Navigation() {
         setOpen(false);
       }
     },
-    [isHome]
+    [isHome],
   );
 
   return (
@@ -84,19 +84,21 @@ export default function Navigation() {
           </a>
 
           <div className="v8-nav-right v8-nav-desktop">
-            {RIGHT_NAV.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="v8-nav-link"
-                onClick={(e) => go(e, item.href)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {!isHome &&
+              PHASE_NAV.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="v8-nav-link"
+                  onClick={(e) => go(e, item.href)}
+                >
+                  {item.label}
+                </a>
+              ))}
             <a
-              href="mailto:hello@beeclaros.com"
+              href="/#contact"
               className="v8-nav-contact"
+              onClick={(e) => go(e, "/#contact")}
             >
               Contact <span className="v8-arrow">&rarr;</span>
             </a>
@@ -116,7 +118,7 @@ export default function Navigation() {
       </nav>
 
       <div className={`v8-mobile-menu ${open ? "open" : ""}`}>
-        {[...LEFT_NAV, ...RIGHT_NAV].map((item) => (
+        {(isHome ? LEFT_NAV : [...LEFT_NAV, ...PHASE_NAV]).map((item) => (
           <a
             key={item.label}
             href={item.href}
@@ -127,8 +129,9 @@ export default function Navigation() {
           </a>
         ))}
         <a
-          href="mailto:hello@beeclaros.com"
+          href="/#contact"
           className="v8-mobile-link"
+          onClick={(e) => go(e, "/#contact")}
         >
           Contact
         </a>

@@ -38,12 +38,12 @@ export default function PhaseCTA({
           position: "absolute",
           inset: 0,
           zIndex: 0,
-          opacity: 0.45,
+          opacity: 0.32,
           mixBlendMode: "multiply",
           maskImage:
-            "linear-gradient(to left, black 0%, black 18%, transparent 58%)",
+            "linear-gradient(to left, black 0%, black 22%, transparent 62%)",
           WebkitMaskImage:
-            "linear-gradient(to left, black 0%, black 18%, transparent 58%)",
+            "linear-gradient(to left, black 0%, black 22%, transparent 62%)",
         }}
       >
         <Image

@@ -2,11 +2,25 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 export default function BrandStatement() {
   const ref = useRef<HTMLElement>(null);
   useScrollReveal(ref);
+  const reducedMotion = useReducedMotion();
+  const live = reducedMotion !== true;
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const swarmX = useTransform(scrollYProgress, [0, 1], ["0%", "2.5%"]);
 
   return (
     <section
@@ -19,16 +33,19 @@ export default function BrandStatement() {
         overflow: "hidden",
       }}
     >
-      <div
+      <motion.div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           zIndex: 0,
-          opacity: 0.52,
+          opacity: 0.32,
           mixBlendMode: "multiply",
-          maskImage: "linear-gradient(to left, black 0%, black 18%, transparent 58%)",
-          WebkitMaskImage: "linear-gradient(to left, black 0%, black 18%, transparent 58%)",
+          maskImage:
+            "linear-gradient(to left, black 0%, black 22%, transparent 62%)",
+          WebkitMaskImage:
+            "linear-gradient(to left, black 0%, black 22%, transparent 62%)",
+          x: live ? swarmX : 0,
         }}
       >
         <Image
@@ -38,10 +55,15 @@ export default function BrandStatement() {
           sizes="100vw"
           style={{ objectFit: "cover", objectPosition: "right center" }}
         />
-      </div>
+      </motion.div>
 
       <div className="v8-container" style={{ position: "relative", zIndex: 2 }}>
-        <div style={{ maxWidth: "38ch", marginLeft: "clamp(0rem, 6vw, 4.5rem)" }}>
+        <div
+          style={{
+            maxWidth: "38ch",
+            marginLeft: "clamp(0rem, 6vw, 4.5rem)",
+          }}
+        >
           <h2
             className="v8-hero-title v8-reveal"
             style={{
@@ -49,7 +71,7 @@ export default function BrandStatement() {
               fontSize: "clamp(2.25rem, 5vw, 4.25rem)",
             }}
           >
-            Real value starts when the whole business moves together.
+            Let&apos;s put your priorities to work.
           </h2>
           <p
             className="v8-lead v8-reveal v8-reveal-2"
@@ -60,15 +82,22 @@ export default function BrandStatement() {
               opacity: 0.82,
             }}
           >
-            AI creates more value when technology, people and processes move in
-            the same direction.
+            Tell us where you are stuck. We will help you decide what to build
+            next.
           </p>
 
-          <div className="v8-reveal v8-reveal-3" style={{ marginTop: "2.5rem" }}>
+          <div
+            className="v8-reveal v8-reveal-3"
+            style={{ marginTop: "2.5rem" }}
+          >
             <a
               href="mailto:hello@beeclaros.com"
               className="v8-btn-dark"
-              style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
             >
               Talk to us <span className="v8-arrow">&rarr;</span>
             </a>

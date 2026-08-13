@@ -1,75 +1,296 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 
 const PILLARS = [
   {
     title: "AI Strategy",
-    copy: "Focused assessment of where AI can create measurable business value, what it requires and what to prioritise first.",
-    mark: "strategy",
+    copy: "We map where AI earns its place, rank it by impact and feasibility, and hand you a sequence you can fund.",
+    mark: "strategy" as const,
   },
   {
     title: "Product Transformation",
-    copy: "AI built into your products, workflows and systems. Practical solutions designed for how your teams already work.",
-    mark: "product",
+    copy: "We build AI into the products and workflows your teams already ship, so it moves with the rest of the roadmap.",
+    mark: "product" as const,
   },
   {
     title: "Process Transformation",
-    copy: "Reduce repetitive work, improve operational visibility and support better decisions where AI can make a meaningful difference.",
-    mark: "process",
+    copy: "We take repetitive load off the operation and put visibility where decisions are actually made.",
+    mark: "process" as const,
   },
   {
     title: "People & AI Culture",
-    copy: "Training, adoption and change support designed around the teams using the solution. We build adoption into delivery from the start.",
-    mark: "people",
+    copy: "We train the people who will use it and design the change with them, so adoption is part of delivery.",
+    mark: "people" as const,
   },
 ];
 
-function PillarMark({ type }: { type: string }) {
-  const s = { width: 36, height: 36 } as const;
+type MarkType = (typeof PILLARS)[number]["mark"];
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function hexPath(cx: number, cy: number, r: number) {
+  const pts: [number, number][] = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i - Math.PI / 2;
+    pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+  return (
+    "M " +
+    pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(" L ") +
+    " Z"
+  );
+}
+
+const STRATEGY_R = 6;
+
+/** Neighbouring pointy-top cells sit r*sqrt(3) apart, so the ring never collides. */
+const STRATEGY_RING = Array.from({ length: 6 }, (_, i) => {
+  const a = (Math.PI / 3) * i;
+  const d = STRATEGY_R * Math.sqrt(3);
+  return [24 + d * Math.cos(a), 24 + d * Math.sin(a)] as const;
+});
+
+function PillarMark({ type, animate }: { type: MarkType; animate: boolean }) {
   const stroke = "var(--v8-text-primary)";
+  const drawProps = animate
+    ? {
+        initial: { pathLength: 0, opacity: 0.35 },
+        animate: { pathLength: 1, opacity: 1 },
+        transition: { duration: 0.75, ease: EASE },
+      }
+    : { initial: false as const, animate: { pathLength: 1, opacity: 1 } };
+
+  const nodeProps = animate
+    ? {
+        initial: { opacity: 0, scale: 0.4 },
+        animate: { opacity: 1, scale: 1 },
+        transition: { duration: 0.35, delay: 0.55, ease: EASE },
+      }
+    : { initial: false as const, animate: { opacity: 1, scale: 1 } };
+
   switch (type) {
     case "strategy":
       return (
-        <svg {...s} viewBox="0 0 36 36" fill="none" stroke={stroke} strokeWidth="1.5" aria-hidden="true">
-          <path d="M18 4 L18 32 M4 18 L32 18" />
-          <circle cx="18" cy="18" r="3.4" fill="var(--v8-lime)" stroke="none" />
+        <svg width={48} height={48} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          {STRATEGY_RING.map(([cx, cy], i) => (
+            <motion.path
+              key={i}
+              d={hexPath(cx, cy, STRATEGY_R)}
+              stroke={stroke}
+              strokeWidth="1.5"
+              fill="none"
+              {...drawProps}
+              transition={{
+                duration: 0.75,
+                delay: animate ? i * 0.05 : 0,
+                ease: EASE,
+              }}
+            />
+          ))}
+          <motion.path
+            d={hexPath(24, 24, STRATEGY_R)}
+            fill="var(--v8-lime)"
+            stroke="none"
+            className="wwd-mark-node"
+            {...nodeProps}
+          />
         </svg>
       );
     case "product":
       return (
-        <svg {...s} viewBox="0 0 36 36" fill="none" stroke={stroke} strokeWidth="1.5" aria-hidden="true">
-          <path d="M18 3 L31 10.5 L31 25.5 L18 33 L5 25.5 L5 10.5 Z" />
-          <circle cx="18" cy="18" r="3.2" fill="var(--v8-lime)" stroke="none" />
+        <svg width={48} height={48} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <motion.path
+            d={hexPath(24, 24, 18)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+          />
+          <motion.path
+            d={hexPath(24, 24, 9)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.7, delay: animate ? 0.2 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={24}
+            cy={24}
+            r={2.8}
+            fill="var(--v8-lime)"
+            stroke="none"
+            className="wwd-mark-node"
+            {...nodeProps}
+          />
         </svg>
       );
     case "process":
       return (
-        <svg {...s} viewBox="0 0 36 36" fill="none" stroke={stroke} strokeWidth="1.5" aria-hidden="true">
-          <path d="M3 28 C 12 23, 16 10, 33 7" />
-          <circle cx="33" cy="7" r="2.8" fill="var(--v8-lime)" stroke="none" />
+        <svg width={48} height={48} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <motion.path
+            d={hexPath(10, 30, 7)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+          />
+          <motion.path
+            d={hexPath(24, 18, 7)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.7, delay: animate ? 0.12 : 0, ease: EASE }}
+          />
+          <motion.path
+            d={hexPath(38, 12, 7)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.7, delay: animate ? 0.24 : 0, ease: EASE }}
+          />
+          <motion.line
+            x1={16}
+            y1={26}
+            x2={18.5}
+            y2={22}
+            stroke={stroke}
+            strokeWidth="1.5"
+            {...drawProps}
+            transition={{ duration: 0.4, delay: animate ? 0.35 : 0, ease: EASE }}
+          />
+          <motion.line
+            x1={30}
+            y1={15}
+            x2={32.5}
+            y2={13}
+            stroke={stroke}
+            strokeWidth="1.5"
+            {...drawProps}
+            transition={{ duration: 0.4, delay: animate ? 0.45 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={17.2}
+            cy={24}
+            r={2.2}
+            fill="var(--v8-lime)"
+            stroke="none"
+            className="wwd-mark-node"
+            {...nodeProps}
+          />
+          <motion.circle
+            cx={31.2}
+            cy={14}
+            r={2.2}
+            fill="var(--v8-lime)"
+            stroke="none"
+            className="wwd-mark-node"
+            {...nodeProps}
+            transition={{ duration: 0.35, delay: animate ? 0.65 : 0, ease: EASE }}
+          />
         </svg>
       );
     case "people":
     default:
       return (
-        <svg {...s} viewBox="0 0 36 36" fill="none" stroke={stroke} strokeWidth="1.5" aria-hidden="true">
-          <circle cx="8" cy="18" r="4" />
-          <circle cx="28" cy="8" r="4" />
-          <circle cx="28" cy="28" r="4" />
-          <path d="M12 16 L24 10 M12 20 L24 26" />
-          <circle cx="8" cy="18" r="1.6" fill="var(--v8-lime)" stroke="none" />
+        <svg width={48} height={48} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <motion.path
+            d={hexPath(24, 24, 9)}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+          />
+          <motion.line
+            x1={24}
+            y1={15}
+            x2={24}
+            y2={9}
+            stroke={stroke}
+            strokeWidth="1.5"
+            {...drawProps}
+            transition={{ duration: 0.4, delay: animate ? 0.2 : 0, ease: EASE }}
+          />
+          <motion.line
+            x1={31.5}
+            y1={28}
+            x2={37}
+            y2={32}
+            stroke={stroke}
+            strokeWidth="1.5"
+            {...drawProps}
+            transition={{ duration: 0.4, delay: animate ? 0.28 : 0, ease: EASE }}
+          />
+          <motion.line
+            x1={16.5}
+            y1={28}
+            x2={11}
+            y2={32}
+            stroke={stroke}
+            strokeWidth="1.5"
+            {...drawProps}
+            transition={{ duration: 0.4, delay: animate ? 0.36 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={24}
+            cy={7}
+            r={3}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.5, delay: animate ? 0.3 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={38}
+            cy={34}
+            r={3}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.5, delay: animate ? 0.38 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={10}
+            cy={34}
+            r={3}
+            stroke={stroke}
+            strokeWidth="1.5"
+            fill="none"
+            {...drawProps}
+            transition={{ duration: 0.5, delay: animate ? 0.46 : 0, ease: EASE }}
+          />
+          <motion.circle
+            cx={24}
+            cy={24}
+            r={2.6}
+            fill="var(--v8-lime)"
+            stroke="none"
+            className="wwd-mark-node"
+            {...nodeProps}
+          />
         </svg>
       );
   }
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-
 export default function WhatWeDo() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1, margin: "0px 0px -40px 0px" });
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.1,
+    margin: "0px 0px -40px 0px",
+  });
   const reducedMotion = useReducedMotion();
   const live = reducedMotion !== true;
 
@@ -94,7 +315,10 @@ export default function WhatWeDo() {
     >
       <div
         className="v8-container"
-        style={{ paddingTop: "clamp(5rem, 11vw, 10rem)", paddingBottom: "clamp(5rem, 11vw, 10rem)" }}
+        style={{
+          paddingTop: "clamp(5rem, 11vw, 10rem)",
+          paddingBottom: "clamp(5rem, 11vw, 10rem)",
+        }}
       >
         <motion.div
           variants={intro}
@@ -110,7 +334,7 @@ export default function WhatWeDo() {
               fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)",
             }}
           >
-            AI creates value when it solves the{" "}
+            Useful when it solves the{" "}
             <span style={{ color: "var(--v8-lime-deep)" }}>
               right business problems.
             </span>
@@ -120,26 +344,26 @@ export default function WhatWeDo() {
             variants={fade}
             style={{ marginTop: "1.5rem", maxWidth: "38rem" }}
           >
-            We work across strategy, products, processes and people — especially
-            where AI activity is fragmented, priorities are unclear or
-            implementation needs to move beyond isolated experiments.
+            We work across strategy, products, processes and people. We work
+            best with teams that already feel the cost of an unclear order of
+            work.
           </motion.p>
         </motion.div>
 
         <motion.div
-          className="wwd-grid"
+          className={`wwd-grid${inView ? " wwd-grid-shown" : ""}`}
           variants={intro}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
         >
-          {PILLARS.map((pillar) => (
-            <motion.div
-              key={pillar.title}
-              className="wwd-card"
-              variants={fade}
-            >
-              <div style={{ marginBottom: "1.25rem" }}>
-                <PillarMark type={pillar.mark} />
+          {PILLARS.map((pillar, i) => (
+            <motion.div key={pillar.title} className="wwd-card" variants={fade}>
+              <div
+                className="wwd-card-line"
+                style={{ transitionDelay: live ? `${i * 80}ms` : "0ms" }}
+              />
+              <div className="wwd-mark" style={{ marginBottom: "1.5rem" }}>
+                <PillarMark type={pillar.mark} animate={live && inView} />
               </div>
               <h3
                 className="v8-display"
@@ -171,11 +395,40 @@ export default function WhatWeDo() {
           gap: clamp(2rem, 4vw, 3.5rem);
         }
         .wwd-card {
+          position: relative;
           padding: clamp(1.5rem, 3vw, 2.25rem);
-          border-top: 1px solid var(--v8-line);
+          padding-top: calc(clamp(1.5rem, 3vw, 2.25rem) + 1px);
+          border-top: 1px solid transparent;
+        }
+        .wwd-card-line {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 1px;
+          width: 0;
+          background: var(--v8-line);
+          transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease;
+        }
+        .wwd-grid-shown .wwd-card-line {
+          width: 100%;
+        }
+        .wwd-card:hover .wwd-card-line {
+          background: var(--v8-lime);
+        }
+        .wwd-card:hover .wwd-mark-node {
+          animation: v8-dot-pulse 1.4s ease-in-out 1;
         }
         @media (max-width: 720px) {
           .wwd-grid { grid-template-columns: 1fr; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wwd-card-line {
+            width: 100%;
+            transition: none;
+          }
+          .wwd-card:hover .wwd-mark-node {
+            animation: none;
+          }
         }
       `}</style>
     </section>

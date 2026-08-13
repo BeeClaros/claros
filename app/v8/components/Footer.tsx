@@ -1,6 +1,7 @@
 "use client";
 
 import BeeLogo from "./BeeLogo";
+import { siteConfig } from "@/config/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -24,8 +25,8 @@ export default function Footer() {
               className="v8-body"
               style={{ marginTop: "1.25rem", color: "var(--v8-on-dark-secondary)", fontSize: "0.95rem" }}
             >
-              AI adoption and implementation for organisations that want
-              measurable business value.
+              Adoption and implementation for organisations that need clear
+              direction and work that sticks.
             </p>
           </div>
 
@@ -37,7 +38,7 @@ export default function Footer() {
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.65rem" }}>
                 <li>
                   <a
-                    href="https://www.linkedin.com/"
+                    href={siteConfig.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="v8-footer-link"
@@ -46,8 +47,8 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:hello@beeclaros.com" className="v8-footer-link">
-                    hello@beeclaros.com
+                  <a href={`mailto:${siteConfig.email}`} className="v8-footer-link">
+                    {siteConfig.email}
                   </a>
                 </li>
               </ul>
@@ -69,7 +70,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <span style={{ color: "var(--v8-on-dark-muted)", fontSize: "0.8125rem" }}>
-            &copy; {year} CLAROS. All rights reserved.
+            &copy; {year} {siteConfig.name}. All rights reserved.
           </span>
           <span
             className="v8-label"
