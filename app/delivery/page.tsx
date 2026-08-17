@@ -16,7 +16,7 @@ export default function DeliveryPage() {
       <PhaseHero
         phase="Phase 03"
         title="Make it stick."
-        lead="AI only creates lasting value when teams adopt it, governance supports it and the organisation keeps improving."
+        lead="AI creates lasting value when teams adopt it, ownership is clear and the organisation keeps improving how it is used."
         imageSrc="/v8/hero-hive-bg.png"
       />
       <DeliveryContent />

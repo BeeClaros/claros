@@ -8,7 +8,7 @@ import AssessmentContent from "./AssessmentContent";
 export const metadata: Metadata = {
   title: "Assessment - CLAROS",
   description:
-    "Understand where AI creates the strongest return before investing in tools or experiments.",
+    "Understand where AI can create the strongest business value before investing in tools or experiments.",
 };
 
 export default function AssessmentPage() {
@@ -17,7 +17,7 @@ export default function AssessmentPage() {
       <PhaseHero
         phase="Phase 01"
         title="Start with clarity."
-        lead="Before investing in more tools or launching more experiments, understand where AI can create the strongest return."
+        lead="Before investing in more tools or launching more experiments, understand where AI can create the strongest business value."
         statement="You leave knowing what to do first, what it requires and why it matters."
         imageSrc="/v8/hero-hive-bg.png"
       />

@@ -42,8 +42,7 @@ export const metadata: Metadata = {
     default: "CLAROS - AI adoption that works with the business",
     template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "AI adoption and implementation for organisations that want measurable business value. We find where AI creates real value, implement the right solutions and build the foundations to use them across the business.",
+  description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   alternates: {
     canonical: "/",

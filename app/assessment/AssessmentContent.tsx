@@ -17,7 +17,7 @@ const DELIVERABLES = [
   },
   {
     title: "Risks and responsibilities",
-    copy: "Security, compliance and ethical considerations addressed upfront, not as an afterthought.",
+    copy: "Security, compliance and relevant risk considerations identified upfront, with ownership made clear.",
   },
   {
     title: "Implementation roadmap",

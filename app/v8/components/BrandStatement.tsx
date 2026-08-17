@@ -82,8 +82,8 @@ export default function BrandStatement() {
               opacity: 0.82,
             }}
           >
-            Tell us where you are stuck. We will help you decide what to build
-            next.
+            Tell us where the business needs to move. We will help you decide
+            what is worth doing next.
           </p>
 
           <div

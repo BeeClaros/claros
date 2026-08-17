@@ -10,7 +10,7 @@ const PHASES = [
     href: "/assessment",
     copy: "We establish where you are and what to do first.",
     produces: [
-      "A map of existing initiatives, tools and experiments",
+      "Prioritised opportunities ranked by business value, feasibility and readiness",
       "A roadmap with sequencing, ownership and milestones",
     ],
   },
@@ -26,7 +26,7 @@ const PHASES = [
   {
     title: "Delivery",
     href: "/delivery",
-    copy: "We keep it working and widen what proves out.",
+    copy: "We measure what works, improve it and expand where it creates value.",
     produces: [
       "Outcome measurement tied to business goals",
       "Team support and expansion of what works",

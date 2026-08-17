@@ -4,8 +4,8 @@ import PhaseSection from "../v8/components/phase/PhaseSection";
 
 const PRODUCT_ITEMS = [
   {
-    title: "Workflow integration",
-    copy: "AI capabilities embedded directly into existing tools and processes - not bolt-on experiments.",
+    title: "Product and system integration",
+    copy: "AI capabilities embedded directly into existing products, platforms and business systems.",
   },
   {
     title: "Custom solutions",
@@ -87,8 +87,9 @@ export default function BuildContent() {
             className="v8-lead v8-reveal v8-reveal-1"
             style={{ marginTop: "1.25rem", maxWidth: "34rem" }}
           >
-            AI built into your products, workflows and systems - not standalone
-            experiments that never reach production.
+            AI built into the products, platforms and systems your customers
+            and teams already use - not standalone experiments that never reach
+            production.
           </p>
         </div>
 

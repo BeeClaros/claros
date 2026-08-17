@@ -25,8 +25,8 @@ export default function Footer() {
               className="v8-body"
               style={{ marginTop: "1.25rem", color: "var(--v8-on-dark-secondary)", fontSize: "0.95rem" }}
             >
-              Adoption and implementation for organisations that need clear
-              direction and work that sticks.
+              AI adoption and implementation for organisations that need clear
+              priorities and practical delivery.
             </p>
           </div>
 

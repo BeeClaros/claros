@@ -100,8 +100,9 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
               >
-                We help you decide what matters, build what fits, and keep it
-                working with your teams.
+                We help organisations decide where AI can create measurable
+                value, implement what fits their business, and make it work with
+                the teams who use it.
               </motion.p>
 
               <motion.div

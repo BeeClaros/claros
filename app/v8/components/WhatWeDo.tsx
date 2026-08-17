@@ -11,17 +11,17 @@ import {
 const PILLARS = [
   {
     title: "AI Strategy",
-    copy: "We map where AI earns its place, rank it by impact and feasibility, and hand you a sequence you can fund.",
+    copy: "We map where AI earns its place, rank opportunities by impact and feasibility, and define what should happen first.",
     mark: "strategy" as const,
   },
   {
     title: "Product Transformation",
-    copy: "We build AI into the products and workflows your teams already ship, so it moves with the rest of the roadmap.",
+    copy: "We build AI into the products, platforms and systems your customers and teams already use.",
     mark: "product" as const,
   },
   {
     title: "Process Transformation",
-    copy: "We take repetitive load off the operation and put visibility where decisions are actually made.",
+    copy: "We redesign high-friction workflows where AI can reduce repetitive work, improve decisions and make operations easier to run.",
     mark: "process" as const,
   },
   {
@@ -334,7 +334,7 @@ export default function WhatWeDo() {
               fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)",
             }}
           >
-            Useful when it solves the{" "}
+            AI is useful when it solves the{" "}
             <span style={{ color: "var(--v8-lime-deep)" }}>
               right business problems.
             </span>
@@ -344,9 +344,10 @@ export default function WhatWeDo() {
             variants={fade}
             style={{ marginTop: "1.5rem", maxWidth: "38rem" }}
           >
-            We work across strategy, products, processes and people. We work
-            best with teams that already feel the cost of an unclear order of
-            work.
+            We work across strategy, products, processes and people. We are
+            most useful when AI activity already exists, but priorities are
+            unclear or promising experiments need a practical path into the
+            business.
           </motion.p>
         </motion.div>
 

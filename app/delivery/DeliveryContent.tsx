@@ -12,8 +12,8 @@ const ADOPTION_ITEMS = [
     copy: "Ongoing guidance for the teams using new tools and workflows. We help teams identify issues early and resolve them before momentum stalls.",
   },
   {
-    title: "Expansion planning",
-    copy: "Once a solution works, we identify where the same approach can create value in other teams and processes.",
+    title: "Continuous improvement and expansion",
+    copy: "We review what is working, refine existing solutions and identify where the next worthwhile opportunities are across the business.",
   },
 ];
 
@@ -43,7 +43,7 @@ const CULTURE_ITEMS = [
 const GOVERNANCE_ITEMS = [
   {
     title: "Ownership and accountability",
-    copy: "Every AI system has a clear owner, defined responsibilities and an escalation path.",
+    copy: "Clear ownership, defined responsibilities and appropriate escalation paths for AI systems in operation.",
   },
   {
     title: "Security and compliance",
@@ -55,7 +55,7 @@ const GOVERNANCE_ITEMS = [
   },
   {
     title: "Continuous improvement",
-    copy: "Regular reviews to refine, retrain and expand AI solutions as the business evolves.",
+    copy: "Regular reviews to refine workflows, controls and AI solutions as the business evolves.",
   },
 ];
 
