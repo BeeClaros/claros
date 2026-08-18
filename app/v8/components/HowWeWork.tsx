@@ -19,8 +19,8 @@ const PHASES = [
     href: "/build",
     copy: "We implement the priorities that earned their place.",
     produces: [
-      "Systems running inside your current stack",
-      "Integration, handover and the measurement around it",
+      "Systems running inside your current stack or a dedicated AI environment",
+      "Integration, controls, handover and measurement around it",
     ],
   },
   {

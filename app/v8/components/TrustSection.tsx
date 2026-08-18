@@ -1,25 +1,37 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
-const PRINCIPLES = [
+const ITEMS = [
   "Privacy by design",
+  "GDPR-aware data processing",
+  "EU AI Act readiness",
   "Security built in",
+  "Data minimisation",
+  "Human oversight",
   "Clear ownership",
+  "Access controls",
+  "Provider transparency",
   "Deployment that fits",
 ];
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+function Strip({ hidden }: { hidden?: boolean }) {
+  return (
+    <span className="trust-strip" aria-hidden={hidden || undefined}>
+      {ITEMS.map((item) => (
+        <span key={item} className="trust-item">
+          <span className="trust-dot" aria-hidden="true" />
+          {item}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export default function TrustSection() {
   const ref = useRef<HTMLElement>(null);
   useScrollReveal(ref);
-  const principlesRef = useRef<HTMLDivElement>(null);
-  const principlesInView = useInView(principlesRef, { once: true, amount: 0.2 });
-  const reducedMotion = useReducedMotion();
-  const live = reducedMotion !== true;
 
   return (
     <section
@@ -35,65 +47,91 @@ export default function TrustSection() {
         <h2
           className="v8-section-title v8-reveal"
           style={{
-            maxWidth: "18ch",
+            maxWidth: "22ch",
             fontSize: "clamp(1.75rem, 3.2vw, 2.5rem)",
           }}
         >
-          Security, privacy and control from the start.
+          Privacy, security and responsible AI from the start.
         </h2>
+      </div>
 
-        <div ref={principlesRef} className="trust-row">
-          {PRINCIPLES.map((title, i) => (
-            <motion.p
-              key={title}
-              className="trust-label"
-              initial={live ? { opacity: 0, y: 18 } : false}
-              animate={
-                principlesInView || !live
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 18 }
-              }
-              transition={{
-                duration: live ? 0.6 : 0,
-                delay: live ? i * 0.1 : 0,
-                ease: EASE,
-              }}
-            >
-              {title}
-            </motion.p>
-          ))}
+      <div className="trust-marquee-mask">
+        <div className="trust-marquee">
+          <Strip />
+          <Strip hidden />
         </div>
       </div>
 
       <style>{`
-        .trust-row {
-          margin-top: clamp(2rem, 4vw, 3rem);
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: clamp(1.25rem, 3vw, 2rem);
+        .trust-marquee-mask {
+          margin-top: clamp(1.75rem, 3vw, 2.5rem);
+          overflow: hidden;
+          mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 22%,
+            black 78%,
+            transparent
+          );
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 22%,
+            black 78%,
+            transparent
+          );
         }
-        .trust-label {
-          margin: 0;
-          padding-top: 1rem;
-          border-top: 1px solid var(--v8-line);
+        .trust-marquee {
+          display: flex;
+          width: max-content;
+          animation: trust-scroll 44s linear infinite;
+        }
+        .trust-marquee:hover {
+          animation-play-state: paused;
+        }
+        .trust-strip {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+        .trust-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 0;
+          white-space: nowrap;
+          padding-inline: clamp(0.75rem, 1.5vw, 1.25rem);
           font-family: var(--font-v8-display), system-ui, sans-serif;
           font-size: 1.05rem;
           font-weight: 500;
           letter-spacing: -0.01em;
           color: var(--v8-text-primary);
-          transition: border-color 260ms cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .trust-label:hover {
-          border-top-color: var(--v8-lime);
+        .trust-dot {
+          flex-shrink: 0;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--v8-lime);
+          margin-right: clamp(0.75rem, 1.5vw, 1.25rem);
         }
-        @media (max-width: 900px) {
-          .trust-row { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 640px) {
-          .trust-row { grid-template-columns: 1fr; }
+        @keyframes trust-scroll {
+          to { transform: translateX(-50%); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .trust-label { transition: none; }
+          .trust-marquee {
+            animation: none;
+            flex-wrap: wrap;
+            width: auto;
+            gap: 0.25rem 0;
+            padding-inline: var(--v8-gutter);
+          }
+          .trust-marquee-mask {
+            mask-image: none;
+            -webkit-mask-image: none;
+          }
+          .trust-marquee .trust-strip:last-child {
+            display: none;
+          }
         }
       `}</style>
     </section>

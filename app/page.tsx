@@ -1,6 +1,7 @@
 import Navigation from "./v8/components/Navigation";
 import Hero from "./v8/components/Hero";
 import WhatWeDo from "./v8/components/WhatWeDo";
+import PrivateAIFoundation from "./v8/components/PrivateAIFoundation";
 import HowWeWork from "./v8/components/HowWeWork";
 import TrustSection from "./v8/components/TrustSection";
 import BrandStatement from "./v8/components/BrandStatement";
@@ -16,6 +17,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <WhatWeDo />
+        <PrivateAIFoundation />
         <HowWeWork />
         <TrustSection />
         <BrandStatement />
