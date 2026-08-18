@@ -69,15 +69,15 @@ export default function TrustSection() {
           mask-image: linear-gradient(
             to right,
             transparent,
-            black 22%,
-            black 78%,
+            black 32%,
+            black 68%,
             transparent
           );
           -webkit-mask-image: linear-gradient(
             to right,
             transparent,
-            black 22%,
-            black 78%,
+            black 32%,
+            black 68%,
             transparent
           );
         }
