@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionValueEvent,
@@ -17,10 +17,63 @@ const HiveVideo = dynamic(() => import("./hive/HiveVideo"), { ssr: false });
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const TYPED_TITLE = "The discipline to build.";
+const TYPED_SUBTITLE =
+  "We help organisations decide where AI can create measurable value, implement what fits their business, and make it work with the teams who use it.";
+
+const TYPE_SPEED_TITLE = 38;
+const TYPE_SPEED_SUB = 28;
+const TITLE_START_DELAY = 600;
+const SUB_START_DELAY = 1200;
+
+function useTypewriter(
+  text: string,
+  speed: number,
+  startDelay: number,
+  trigger: boolean,
+) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+  const idx = useRef(0);
+
+  const reset = useCallback(() => {
+    idx.current = 0;
+    setDisplayed("");
+    setDone(false);
+  }, []);
+
+  useEffect(() => {
+    if (!trigger) {
+      reset();
+      return;
+    }
+
+    const delayId = setTimeout(() => {
+      const tick = () => {
+        idx.current += 1;
+        setDisplayed(text.slice(0, idx.current));
+        if (idx.current >= text.length) {
+          setDone(true);
+        }
+      };
+      const iv = setInterval(tick, speed);
+      tick();
+      return () => clearInterval(iv);
+    }, startDelay);
+
+    return () => clearTimeout(delayId);
+  }, [trigger, text, speed, startDelay, reset]);
+
+  return { displayed, done };
+}
+
 export default function Hero() {
   const pinRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const reducedMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const { scrollYProgress } = useScroll({
     target: pinRef,
@@ -48,6 +101,21 @@ export default function Hero() {
   );
 
   const forceComplete = reducedMotion === true;
+
+  const title = useTypewriter(
+    TYPED_TITLE,
+    TYPE_SPEED_TITLE,
+    TITLE_START_DELAY,
+    mounted && !forceComplete,
+  );
+  const subtitle = useTypewriter(
+    TYPED_SUBTITLE,
+    TYPE_SPEED_SUB,
+    SUB_START_DELAY,
+    title.done,
+  );
+
+  const showCta = forceComplete || subtitle.done;
 
   return (
     <div
@@ -83,27 +151,41 @@ export default function Hero() {
                     }
               }
             >
-              <motion.h1
-                className="v8-hero-title"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-              >
+              <h1 className="v8-hero-title">
                 The clarity to choose.{" "}
-                <span className="v8-accent-text">The discipline to build.</span>
-              </motion.h1>
+                <span className="v8-accent-text">
+                  {forceComplete ? (
+                    TYPED_TITLE
+                  ) : (
+                    <>
+                      {title.displayed}
+                      {!title.done && (
+                        <span className="hero-caret" aria-hidden="true" />
+                      )}
+                    </>
+                  )}
+                </span>
+              </h1>
 
-              <motion.p
+              <p
                 className="v8-lead"
-                style={{ marginTop: "1.75rem", maxWidth: "34rem" }}
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
+                style={{
+                  marginTop: "1.75rem",
+                  maxWidth: "34rem",
+                  minHeight: "4.5em",
+                }}
               >
-                We help organisations decide where AI can create measurable
-                value, implement what fits their business, and make it work with
-                the teams who use it.
-              </motion.p>
+                {forceComplete ? (
+                  TYPED_SUBTITLE
+                ) : (
+                  <>
+                    {subtitle.displayed}
+                    {title.done && !subtitle.done && (
+                      <span className="hero-caret hero-caret--sub" aria-hidden="true" />
+                    )}
+                  </>
+                )}
+              </p>
 
               <motion.div
                 style={{
@@ -113,9 +195,13 @@ export default function Hero() {
                   gap: "1.5rem",
                   flexWrap: "wrap",
                 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+                initial={forceComplete ? false : { opacity: 0, y: 20 }}
+                animate={
+                  showCta
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{ duration: 0.6, ease: EASE }}
               >
                 <a href="mailto:hello@beeclaros.com" className="v8-btn-primary">
                   Discuss your priorities <span className="v8-arrow">&rarr;</span>
@@ -127,6 +213,29 @@ export default function Hero() {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .hero-caret {
+          display: inline-block;
+          width: 3px;
+          height: 0.85em;
+          margin-left: 2px;
+          vertical-align: baseline;
+          background: var(--v8-lime);
+          animation: hero-blink 0.6s step-end infinite;
+        }
+        .hero-caret--sub {
+          width: 2px;
+          height: 0.9em;
+        }
+        @keyframes hero-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-caret { animation: none; display: none; }
+        }
+      `}</style>
     </div>
   );
 }
