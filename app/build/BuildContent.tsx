@@ -1,6 +1,6 @@
 "use client";
 
-import PhaseSection from "../v8/components/phase/PhaseSection";
+import PhaseSection from "@/components/phase/PhaseSection";
 
 const PRODUCT_ITEMS = [
   {
@@ -72,7 +72,7 @@ export default function BuildContent() {
     <>
       <PhaseSection
         tone="secondary"
-        imageSrc="/v8/hero-hive-bg.png"
+        imageSrc="/images/hero-hive-bg.png"
         imageSide="right"
         imageOpacity={0.38}
       >
@@ -176,7 +176,7 @@ export default function BuildContent() {
 
       <PhaseSection
         tone="dark"
-        imageSrc="/v8/bg-hive.png"
+        imageSrc="/images/bg-hive.png"
         imageSide="right"
         imageOpacity={0.18}
       >

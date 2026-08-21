@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import PhaseShell from "../v8/components/phase/PhaseShell";
-import PhaseHero from "../v8/components/phase/PhaseHero";
-import PhaseCTA from "../v8/components/phase/PhaseCTA";
+import PhaseShell from "@/components/phase/PhaseShell";
+import PhaseHero from "@/components/phase/PhaseHero";
+import PhaseCTA from "@/components/phase/PhaseCTA";
 import BuildContent from "./BuildContent";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function BuildPage() {
         phase="Phase 02"
         title="Build what fits."
         lead="Practical AI implementation - product and process transformation designed for your teams, your systems and your business."
-        imageSrc="/v8/bg-hive.png"
+        imageSrc="/images/bg-hive.png"
       />
       <BuildContent />
       <PhaseCTA

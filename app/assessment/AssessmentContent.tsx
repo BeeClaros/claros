@@ -1,6 +1,6 @@
 "use client";
 
-import PhaseSection from "../v8/components/phase/PhaseSection";
+import PhaseSection from "@/components/phase/PhaseSection";
 
 const DELIVERABLES = [
   {
@@ -80,7 +80,7 @@ export default function AssessmentContent() {
     <>
       <PhaseSection
         tone="secondary"
-        imageSrc="/v8/bg-hive.png"
+        imageSrc="/images/bg-hive.png"
         imageSide="right"
         imageOpacity={0.42}
       >

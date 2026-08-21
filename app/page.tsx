@@ -1,15 +1,11 @@
-import Navigation from "./v8/components/Navigation";
-import Hero from "./v8/components/Hero";
-// V1 imports (kept for reference):
-// import WhatWeDo from "./v8/components/WhatWeDo";
-// import PrivateAIFoundation from "./v8/components/PrivateAIFoundation";
-// import TrustSection from "./v8/components/TrustSection";
-import WhatWeDo from "./v8/components/WhatWeDoV2";
-import PrivateAIFoundation from "./v8/components/PrivateAIFoundationV2";
-import HowWeWork from "./v8/components/HowWeWork";
-import TrustSection from "./v8/components/TrustSectionV2";
-import BrandStatement from "./v8/components/BrandStatement";
-import Footer from "./v8/components/Footer";
+import Navigation from "@/components/layout/Navigation";
+import Hero from "@/components/home/Hero";
+import WhatWeDo from "@/components/home/WhatWeDo";
+import PrivateAIFoundation from "@/components/home/PrivateAIFoundation";
+import HowWeWork from "@/components/home/HowWeWork";
+import TrustSection from "@/components/home/TrustSection";
+import BrandStatement from "@/components/home/BrandStatement";
+import Footer from "@/components/layout/Footer";
 
 export default function HomePage() {
   return (

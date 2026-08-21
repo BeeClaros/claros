@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import PhaseShell from "../v8/components/phase/PhaseShell";
-import PhaseHero from "../v8/components/phase/PhaseHero";
-import PhaseCTA from "../v8/components/phase/PhaseCTA";
+import PhaseShell from "@/components/phase/PhaseShell";
+import PhaseHero from "@/components/phase/PhaseHero";
+import PhaseCTA from "@/components/phase/PhaseCTA";
 import DeliveryContent from "./DeliveryContent";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function DeliveryPage() {
         phase="Phase 03"
         title="Make it stick."
         lead="AI creates lasting value when teams adopt it, ownership is clear and the organisation keeps improving how it is used."
-        imageSrc="/v8/hero-hive-bg.png"
+        imageSrc="/images/hero-hive-bg.png"
       />
       <DeliveryContent />
       <PhaseCTA

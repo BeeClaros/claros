@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import PhaseShell from "../v8/components/phase/PhaseShell";
-import PhaseHero from "../v8/components/phase/PhaseHero";
-import PhaseSection from "../v8/components/phase/PhaseSection";
-import PhaseCTA from "../v8/components/phase/PhaseCTA";
+import PhaseShell from "@/components/phase/PhaseShell";
+import PhaseHero from "@/components/phase/PhaseHero";
+import PhaseCTA from "@/components/phase/PhaseCTA";
 import AssessmentContent from "./AssessmentContent";
 
 export const metadata: Metadata = {
@@ -19,7 +18,7 @@ export default function AssessmentPage() {
         title="Start with clarity."
         lead="Before investing in more tools or launching more experiments, understand where AI can create the strongest business value."
         statement="You leave knowing what to do first, what it requires and why it matters."
-        imageSrc="/v8/hero-hive-bg.png"
+        imageSrc="/images/hero-hive-bg.png"
       />
       <AssessmentContent />
       <PhaseCTA
