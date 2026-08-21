@@ -37,16 +37,6 @@ export default function Footer() {
               </div>
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.65rem" }}>
                 <li>
-                  <a
-                    href={siteConfig.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="v8-footer-link"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-                <li>
                   <a href={`mailto:${siteConfig.email}`} className="v8-footer-link">
                     {siteConfig.email}
                   </a>

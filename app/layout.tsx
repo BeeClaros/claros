@@ -93,7 +93,6 @@ export default function RootLayout({
                 email: siteConfig.email,
                 contactType: "sales",
               },
-              sameAs: [siteConfig.linkedin],
             }),
           }}
         />

@@ -3,14 +3,12 @@
 import { type RefObject, useEffect } from "react";
 import { HERO_SNAP_POINTS } from "./heroStages";
 
-const SETTLE_MS = 180;
-const LOCK_MS = 800;
-const SNAP_TOLERANCE = 0.015;
+const COOLDOWN_MS = 900;
+const MIN_SWIPE_PX = 30;
 
 /**
- * After the user stops scrolling inside the hero pin, gently correct
- * to the nearest snap point using the browser's native smooth scroll.
- * No wheel interception — video scrubbing and spring stay untouched.
+ * Intercept wheel / touch inside the hero pin and advance exactly one
+ * snap point per gesture, using the browser's smooth scroll.
  */
 export function useHeroScrollSnap(
   pinRef: RefObject<HTMLElement | null>,
@@ -20,50 +18,97 @@ export function useHeroScrollSnap(
     const pin = pinRef.current;
     if (!pin || !enabled) return;
 
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let locked = false;
+    let animating = false;
+    let currentIndex = 0;
+    let cooldownTimer: ReturnType<typeof setTimeout> | undefined;
 
-    const onScrollEnd = () => {
-      if (locked) return;
+    function getPinAbsTop() {
+      return window.scrollY + pin!.getBoundingClientRect().top;
+    }
 
-      const rect = pin.getBoundingClientRect();
-      const pinTop = window.scrollY + rect.top;
-      const range = Math.max(pin.offsetHeight - window.innerHeight, 1);
-      const progress = (window.scrollY - pinTop) / range;
+    function getRange() {
+      return Math.max(pin!.offsetHeight - window.innerHeight, 1);
+    }
 
-      if (progress < -0.01 || progress > 1.01) return;
+    function getProgress() {
+      return (window.scrollY - getPinAbsTop()) / getRange();
+    }
 
-      let best = HERO_SNAP_POINTS[0];
-      let bestDist = Math.abs(progress - best);
+    function syncIndex() {
+      const p = getProgress();
+      let best = 0;
+      let bestD = Math.abs(p - HERO_SNAP_POINTS[0]);
       for (let i = 1; i < HERO_SNAP_POINTS.length; i++) {
-        const d = Math.abs(progress - HERO_SNAP_POINTS[i]);
-        if (d < bestDist) {
-          bestDist = d;
-          best = HERO_SNAP_POINTS[i];
-        }
+        const d = Math.abs(p - HERO_SNAP_POINTS[i]);
+        if (d < bestD) { bestD = d; best = i; }
       }
+      currentIndex = best;
+    }
 
-      if (bestDist < SNAP_TOLERANCE) return;
+    syncIndex();
 
-      const targetY = pinTop + best * range;
-      locked = true;
+    function snapTo(index: number) {
+      const clamped = Math.max(0, Math.min(index, HERO_SNAP_POINTS.length - 1));
+      currentIndex = clamped;
+      animating = true;
+
+      const targetY = getPinAbsTop() + HERO_SNAP_POINTS[clamped] * getRange();
       window.scrollTo({ top: targetY, behavior: "smooth" });
-      setTimeout(() => {
-        locked = false;
-      }, LOCK_MS);
-    };
 
-    const onScroll = () => {
-      if (locked) return;
-      clearTimeout(timer);
-      timer = setTimeout(onScrollEnd, SETTLE_MS);
-    };
+      clearTimeout(cooldownTimer);
+      cooldownTimer = setTimeout(() => { animating = false; }, COOLDOWN_MS);
+    }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    /* ── Wheel ──────────────────────────────────────────────── */
+    function onWheel(e: WheelEvent) {
+      const p = getProgress();
+      if (p < -0.02 || p > 1.02) return;
+
+      if (currentIndex === 0 && e.deltaY < 0) return;
+      if (currentIndex === HERO_SNAP_POINTS.length - 1 && e.deltaY > 0) return;
+
+      e.preventDefault();
+      if (animating || Math.abs(e.deltaY) < 2) return;
+
+      snapTo(e.deltaY > 0 ? currentIndex + 1 : currentIndex - 1);
+    }
+
+    /* ── Touch ──────────────────────────────────────────────── */
+    let touchStartY = 0;
+    let touchHandled = false;
+
+    function onTouchStart(e: TouchEvent) {
+      touchStartY = e.touches[0].clientY;
+      touchHandled = false;
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (touchHandled) { e.preventDefault(); return; }
+      if (animating) { e.preventDefault(); return; }
+
+      const p = getProgress();
+      if (p < -0.02 || p > 1.02) return;
+
+      const delta = touchStartY - e.touches[0].clientY;
+      if (Math.abs(delta) < MIN_SWIPE_PX) return;
+
+      if (currentIndex === 0 && delta < 0) return;
+      if (currentIndex === HERO_SNAP_POINTS.length - 1 && delta > 0) return;
+
+      e.preventDefault();
+      touchHandled = true;
+      snapTo(delta > 0 ? currentIndex + 1 : currentIndex - 1);
+    }
+
+    pin.addEventListener("wheel", onWheel, { passive: false });
+    pin.addEventListener("touchstart", onTouchStart, { passive: true });
+    pin.addEventListener("touchmove", onTouchMove, { passive: false });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      clearTimeout(timer);
+      pin.removeEventListener("wheel", onWheel);
+      pin.removeEventListener("touchstart", onTouchStart);
+      pin.removeEventListener("touchmove", onTouchMove);
+      clearTimeout(cooldownTimer);
     };
   }, [pinRef, enabled]);
 }

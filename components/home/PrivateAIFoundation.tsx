@@ -157,7 +157,7 @@ export default function PrivateAIFoundationV2() {
           style={{ maxWidth: "42rem", marginTop: "1.25rem" }}
         >
           A fully managed AI environment your teams can start using in
-          days&nbsp;&mdash; not months. ChatGPT-style interface, API access,
+          days, not months. ChatGPT-style interface, API access,
           built-in guardrails and automatic personal data anonymisation. Hosted
           in Europe, on dedicated infrastructure you control.
         </p>

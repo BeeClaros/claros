@@ -22,7 +22,7 @@ export default function DeliveryPage() {
       <DeliveryContent />
       <PhaseCTA
         title="Turn implementation into lasting value."
-        lead="Let's discuss how to make AI part of how your teams work — with adoption, measurement and support built in."
+        lead="Let's discuss how to make AI part of how your teams work, with adoption, measurement and support built in."
         ctaLabel="Discuss ongoing support"
       />
     </PhaseShell>
