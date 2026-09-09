@@ -19,6 +19,16 @@ const ITEMS = [
   "Access controls",
   "Provider transparency",
   "Deployment that fits",
+  "HIPAA-aware",
+  "CCPA-ready",
+  "NIST AI RMF",
+  "SOC 2 aligned",
+  "Explainability",
+  "Auditability",
+  "Fairness monitoring",
+  "Data residency",
+  "Least-privilege access",
+  "Incident response ready",
 ];
 
 const EASE = [0.22, 1, 0.36, 1] as const;

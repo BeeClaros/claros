@@ -5,7 +5,7 @@ import PhaseCTA from "@/components/phase/PhaseCTA";
 import AssessmentContent from "./AssessmentContent";
 
 export const metadata: Metadata = {
-  title: "Assessment - CLAROS",
+  title: "Assessment",
   description:
     "Understand where AI can create the strongest business value before investing in tools or experiments.",
 };

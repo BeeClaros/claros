@@ -1,7 +1,7 @@
 import Navigation from "@/components/layout/Navigation";
 import Hero from "@/components/home/Hero";
+import SelectedWork from "@/components/home/SelectedWork";
 import WhatWeDo from "@/components/home/WhatWeDo";
-import PrivateAIFoundation from "@/components/home/PrivateAIFoundation";
 import HowWeWork from "@/components/home/HowWeWork";
 import TrustSection from "@/components/home/TrustSection";
 import BrandStatement from "@/components/home/BrandStatement";
@@ -16,8 +16,8 @@ export default function HomePage() {
       <Navigation />
       <main>
         <Hero />
+        <SelectedWork />
         <WhatWeDo />
-        <PrivateAIFoundation />
         <HowWeWork />
         <TrustSection />
         <BrandStatement />

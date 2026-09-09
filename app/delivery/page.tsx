@@ -5,9 +5,9 @@ import PhaseCTA from "@/components/phase/PhaseCTA";
 import DeliveryContent from "./DeliveryContent";
 
 export const metadata: Metadata = {
-  title: "Continuous Delivery - CLAROS",
+  title: "Continuous Delivery",
   description:
-    "Adoption that lasts - measurement, team support and governance to expand what works across the organisation.",
+    "Adoption that lasts - measurement, team support and governance to expand what works across the company.",
 };
 
 export default function DeliveryPage() {
@@ -16,7 +16,7 @@ export default function DeliveryPage() {
       <PhaseHero
         phase="Phase 03"
         title="Make it stick."
-        lead="AI creates lasting value when teams adopt it, ownership is clear and the organisation keeps improving how it is used."
+        lead="AI creates lasting value when teams adopt it, ownership is clear and the company keeps improving how it is used."
         imageSrc="/images/hero-hive-bg.png"
       />
       <DeliveryContent />

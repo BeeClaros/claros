@@ -25,7 +25,7 @@ export default function Footer() {
               className="v8-body"
               style={{ marginTop: "1.25rem", color: "var(--v8-on-dark-secondary)", fontSize: "0.95rem" }}
             >
-              AI adoption and implementation for organisations that need clear
+              AI adoption and implementation for companies that need clear
               priorities and practical delivery.
             </p>
           </div>
@@ -40,6 +40,14 @@ export default function Footer() {
                   <a href={`mailto:${siteConfig.email}`} className="v8-footer-link">
                     {siteConfig.email}
                   </a>
+                </li>
+                <li>
+                  <address
+                    className="v8-footer-link"
+                    style={{ fontStyle: "normal", cursor: "default", pointerEvents: "none" }}
+                  >
+                    30 N Gould St, Sheridan,<br />WY 82801, USA
+                  </address>
                 </li>
               </ul>
             </div>

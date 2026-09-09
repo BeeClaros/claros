@@ -365,28 +365,16 @@
   white-space: nowrap;
 }
 
-/* Ghost O reserves the exact glyph advance; hex overlays the ink. */
-.v8-logo-o {
-  position: relative;
-  display: inline-block;
-  letter-spacing: 0;
-}
-
-.v8-logo-o-ghost {
-  visibility: hidden;
-}
-
+/* Hex replaces the O, sitting on the same alphabetic baseline as the letters. */
 .v8-logo-hex {
-  position: absolute;
-  left: 50%;
-  /* Lift out of descender space so the hex sits on the capital baseline */
-  bottom: 0.2em;
-  transform: translateX(-50%);
-  display: block;
-  height: 0.72em;
+  display: inline-block;
+  height: 0.7em;
   height: 1cap;
   width: auto;
-  aspect-ratio: 27.6 / 31.6;
+  aspect-ratio: 31.4 / 35.4;
+  vertical-align: baseline;
+  /* R is optically open on the right; tuck the hex toward it */
+  margin-inline: 0 0.05em;
   color: inherit;
   pointer-events: none;
   overflow: visible;
@@ -444,6 +432,69 @@
 
 .v8-nav-link:hover { color: var(--v8-text-primary); }
 .v8-nav-link:hover::after { transform: scaleX(1); }
+
+/* Work dropdown — flex collapses nested whitespace so the label sits on the same baseline */
+.v8-nav-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.v8-nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  padding: .55rem 0;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid var(--v8-line);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms var(--v8-ease), visibility 220ms var(--v8-ease), transform 220ms var(--v8-ease);
+  z-index: 110;
+  margin-top: 4px;
+}
+.v8-nav-dropdown:hover .v8-nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.v8-nav-dropdown-item {
+  display: block;
+  padding: .5rem 1.15rem;
+  font-family: var(--font-v8-sans), sans-serif;
+  font-size: .74rem;
+  font-weight: 500;
+  color: var(--v8-text-secondary);
+  text-decoration: none;
+  transition: background 160ms var(--v8-ease), color 160ms var(--v8-ease);
+  white-space: nowrap;
+}
+.v8-nav-dropdown-item:hover {
+  background: var(--v8-lime);
+  color: var(--v8-text-primary);
+}
+
+/* Mobile sub-links for Work */
+.v8-mobile-sub {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding: .25rem 0 .65rem 1.25rem;
+}
+.v8-mobile-sub-link {
+  text-decoration: none;
+  font-family: var(--font-v8-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--v8-text-secondary);
+  transition: color 200ms var(--v8-ease);
+}
+.v8-mobile-sub-link:hover {
+  color: var(--v8-text-primary);
+}
 
 /* Discrete contact: text + small arrow, lime underline on hover */
 .v8-nav-contact {
@@ -512,6 +563,36 @@
   display: none;
 }
 
+.v8-nav-mobile-end {
+  display: none;
+}
+
+.v8-region-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  cursor: pointer;
+  color: var(--v8-text-secondary);
+  font-family: var(--font-v8-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  transition: color 220ms var(--v8-ease);
+}
+
+.v8-region-toggle:hover {
+  color: var(--v8-text-primary);
+}
+
+.v8-region-toggle svg {
+  display: block;
+  flex-shrink: 0;
+}
+
 @media (max-width: 900px) {
   .v8-nav-grid {
     grid-template-columns: 1fr auto;
@@ -534,10 +615,18 @@
     font-size: inherit;
   }
 
-  .v8-nav .v8-hamburger {
-    display: block;
+  .v8-nav-mobile-end {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
     grid-column: 2;
     justify-self: end;
+    position: relative;
+    z-index: 101;
+  }
+
+  .v8-nav .v8-hamburger {
+    display: block;
   }
 }
 

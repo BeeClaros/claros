@@ -18,9 +18,9 @@ const HiveVideo = dynamic(() => import("@/components/hive/HiveVideo"), { ssr: fa
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const TYPED_TITLE = "The discipline to build.";
+const TYPED_TITLE = "make complex operations run better.";
 const TYPED_SUBTITLE =
-  "We help organisations decide where AI can create measurable value, implement what fits their business, and make it work with the teams who use it.";
+  "We redesign workflows, connect the systems you already use, and build software and automation that reduce manual work, speed up execution and improve how the business performs.";
 
 const TYPE_SPEED_TITLE = 38;
 const TYPE_SPEED_SUB = 28;
@@ -154,20 +154,26 @@ export default function Hero() {
                     }
               }
             >
-              <h1 className="v8-hero-title">
-                The clarity to choose.{" "}
-                <span className="v8-accent-text">
-                  {forceComplete ? (
-                    TYPED_TITLE
-                  ) : (
-                    <>
+              <p className="v8-overline" style={{ marginBottom: "1rem" }}>
+                AI IMPLEMENTATION · AUTOMATION · SOFTWARE
+              </p>
+              <h1 className="v8-hero-title" style={{ fontSize: "clamp(2.25rem, 5vw, 4.5rem)" }}>
+                {forceComplete ? (
+                  <>
+                    AI systems that{" "}
+                    <span className="v8-accent-text">{TYPED_TITLE}</span>
+                  </>
+                ) : (
+                  <>
+                    AI systems that{" "}
+                    <span className="v8-accent-text">
                       {title.displayed}
                       {!title.done && (
                         <span className="hero-caret" aria-hidden="true" />
                       )}
-                    </>
-                  )}
-                </span>
+                    </span>
+                  </>
+                )}
               </h1>
 
               <p

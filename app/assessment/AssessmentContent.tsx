@@ -5,7 +5,7 @@ import PhaseSection from "@/components/phase/PhaseSection";
 const DELIVERABLES = [
   {
     title: "Current AI activity",
-    copy: "A clear map of existing initiatives, tools and experiments across the organisation.",
+    copy: "A clear map of existing initiatives, tools and experiments across the company.",
   },
   {
     title: "High-value opportunities",
@@ -150,7 +150,7 @@ export default function AssessmentContent() {
               color: "var(--v8-on-dark-secondary)",
             }}
           >
-            A focused engagement shaped around your organisation, priorities and
+            A focused engagement shaped around your company, priorities and
             level of complexity, with the scope and depth needed to support
             confident decisions.
           </p>

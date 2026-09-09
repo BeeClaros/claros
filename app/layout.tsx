@@ -54,13 +54,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: "CLAROS - AI adoption that works with the business",
     description:
-      "AI adoption and implementation for organisations that want measurable business value.",
+      "AI adoption and implementation for companies that want measurable business value.",
   },
   twitter: {
     card: "summary_large_image",
     title: "CLAROS - AI adoption that works with the business",
     description:
-      "AI adoption and implementation for organisations that want measurable business value.",
+      "AI adoption and implementation for companies that want measurable business value.",
   },
   robots: {
     index: true,
