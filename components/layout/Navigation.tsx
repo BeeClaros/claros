@@ -125,17 +125,16 @@ export default function Navigation() {
           </a>
 
           <div className="v8-nav-right v8-nav-desktop">
-            {!isHome &&
-              PHASE_NAV.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="v8-nav-link"
-                  onClick={(e) => go(e, item.href)}
-                >
-                  {item.label}
-                </a>
-              ))}
+            {PHASE_NAV.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="v8-nav-link"
+                onClick={(e) => go(e, item.href)}
+              >
+                {item.label}
+              </a>
+            ))}
             <RegionToggle />
             <a
               href="/#contact"
@@ -163,7 +162,7 @@ export default function Navigation() {
       </nav>
 
       <div className={`v8-mobile-menu ${open ? "open" : ""}`}>
-        {(isHome ? LEFT_NAV : [...LEFT_NAV, ...PHASE_NAV]).map((item) => (
+        {[...LEFT_NAV, ...PHASE_NAV].map((item) => (
           <div key={item.label}>
             <a
               href={item.href}

@@ -53,6 +53,18 @@ export default function Footer() {
             </div>
             <div>
               <div className="v8-label" style={{ marginBottom: "1rem" }}>
+                Company
+              </div>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.65rem" }}>
+                <li>
+                  <a href="/about" className="v8-footer-link">
+                    About us
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="v8-label" style={{ marginBottom: "1rem" }}>
                 Legal
               </div>
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.65rem" }}>
