@@ -433,7 +433,7 @@
 .v8-nav-link:hover { color: var(--v8-text-primary); }
 .v8-nav-link:hover::after { transform: scaleX(1); }
 
-/* Work dropdown — flex collapses nested whitespace so the label sits on the same baseline */
+/* Work dropdown - flex collapses nested whitespace so the label sits on the same baseline */
 .v8-nav-dropdown {
   position: relative;
   display: flex;
