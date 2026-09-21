@@ -65,6 +65,7 @@ function scrollToRegister() {
     ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+/* Returns UTM + utm_term params only — safe to send to analytics (no PII). */
 function getUtmParams(): Record<string, string> {
   if (typeof window === "undefined") return {};
   const sp = new URLSearchParams(window.location.search);
@@ -73,7 +74,7 @@ function getUtmParams(): Record<string, string> {
     "utm_medium",
     "utm_campaign",
     "utm_content",
-    "cid",
+    "utm_term",
   ];
   const out: Record<string, string> = {};
   for (const k of keys) {
@@ -83,12 +84,34 @@ function getUtmParams(): Record<string, string> {
   return out;
 }
 
-function trackingBase(utms: Record<string, string>) {
-  return { webinar_id: "roofing_oct_2026_v1", vertical: "roofing", ...utms };
+/* cid is an opaque outreach contact/campaign identifier — payload only, never analytics. */
+function getCid(): string {
+  if (typeof window === "undefined") return "";
+  return new URLSearchParams(window.location.search).get("cid") ?? "";
 }
 
-function handleCtaClick() {
-  track("webinar_register_cta_click", trackingBase(getUtmParams()));
+type CtaSource = "hero" | "demo" | "recording" | "final" | "direct_form";
+
+/* Tracks which registration CTA was last clicked before submission. */
+let lastCtaSource: CtaSource = "direct_form";
+
+/* Builds analytics-safe event properties. cid and any person-level data
+   are never included here. */
+function analyticsProps(
+  utms: Record<string, string>,
+  ctaSource?: CtaSource,
+): Record<string, string> {
+  return {
+    webinar_id: "roofing_oct_2026_v1",
+    vertical: "roofing",
+    ...utms,
+    ...(ctaSource ? { cta_source: ctaSource } : {}),
+  };
+}
+
+function handleCtaClick(source: CtaSource) {
+  lastCtaSource = source;
+  track("webinar_register_cta_click", analyticsProps(getUtmParams(), source));
   scrollToRegister();
 }
 
@@ -146,7 +169,7 @@ const PIPELINE_NODES = [
 
 export default function RoofingWebinarLanding() {
   useEffect(() => {
-    track("webinar_landing_view", trackingBase(getUtmParams()));
+    track("webinar_landing_view", analyticsProps(getUtmParams()));
   }, []);
 
   return (
@@ -187,7 +210,7 @@ function HeroSection() {
             <button
               type="button"
               className="v8-btn-primary wbn-hero-cta"
-              onClick={handleCtaClick}
+              onClick={() => handleCtaClick("hero")}
             >
               Reserve my spot{" "}
               <span className="v8-arrow" aria-hidden="true">
@@ -350,7 +373,7 @@ function WhatYouWillSeeSection() {
             <button
               type="button"
               className="v8-btn-primary"
-              onClick={handleCtaClick}
+              onClick={() => handleCtaClick("demo")}
             >
               Reserve my spot{" "}
               <span className="v8-arrow" aria-hidden="true">
@@ -383,7 +406,7 @@ function RecordingCallout() {
           <button
             type="button"
             className="v8-btn-primary"
-            onClick={handleCtaClick}
+            onClick={() => handleCtaClick("recording")}
             style={{ marginTop: 20 }}
           >
             Reserve my spot{" "}
@@ -533,7 +556,7 @@ function RegistrationSection() {
   const handleFormFocus = useCallback(() => {
     if (!hasStarted.current) {
       hasStarted.current = true;
-      track("webinar_form_start", trackingBase(getUtmParams()));
+      track("webinar_form_start", analyticsProps(getUtmParams()));
     }
   }, []);
 
@@ -580,7 +603,13 @@ function RegistrationSection() {
       if (honeypot) return;
       if (Date.now() - formLoadTimeRef.current < 3000) return;
 
-      track("webinar_registration_submit_attempt", trackingBase(getUtmParams()));
+      const utms = getUtmParams();
+      const ctaSource = lastCtaSource;
+
+      track(
+        "webinar_registration_submit_attempt",
+        analyticsProps(utms, ctaSource),
+      );
 
       const required: (keyof FormData)[] = ["firstName", "lastName", "workEmail"];
       const newTouched: Record<string, boolean> = {};
@@ -603,9 +632,11 @@ function RegistrationSection() {
 
       const existingSystems = joinForSheets(form.existingSystems);
       const workflowInterest = joinForSheets(form.workflowInterest);
-      const utms = getUtmParams();
+      const cid = getCid();
+      const referrer =
+        typeof document !== "undefined" ? document.referrer || "" : "";
 
-      const payload = {
+      const payload: Record<string, string> = {
         firstName: form.firstName,
         lastName: form.lastName,
         workEmail: form.workEmail,
@@ -618,8 +649,12 @@ function RegistrationSection() {
         webinar_title: WEBINAR_TITLE,
         landing_page:
           typeof window !== "undefined" ? window.location.href : "",
+        landing_version: "roofing_v1",
+        referrer,
+        cta_source: ctaSource,
         ...utms,
       };
+      if (cid) payload.cid = cid;
 
       setSubmitting(true);
 
@@ -628,16 +663,29 @@ function RegistrationSection() {
         // responses. Using text/plain avoids the preflight and no-cors lets
         // the browser send the request without one. The response is opaque
         // so we cannot read it — assume success on resolve.
+        //
+        // TODO: webinar_registration_success currently represents a
+        // successfully dispatched browser request, NOT a backend-confirmed
+        // Google Sheet write. Because the response is opaque (mode: no-cors),
+        // it is impossible to inspect the status or body returned by the
+        // Apps Script. Silent script-side failures (e.g. quota exceeded,
+        // permission error) will not be detected here.
         await fetch(FORM_ENDPOINT, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(payload),
         });
-        track("webinar_registration_success", trackingBase(utms));
+        track(
+          "webinar_registration_success",
+          analyticsProps(utms, ctaSource),
+        );
         window.location.href = "/webinars/roofing-october-2026/thank-you/";
       } catch {
-        track("webinar_registration_error", trackingBase(utms));
+        track(
+          "webinar_registration_error",
+          analyticsProps(utms, ctaSource),
+        );
         setError(
           "Something went wrong. Please try again or email hello@beeclaros.com.",
         );
@@ -956,7 +1004,7 @@ function FinalCtaSection() {
         <button
           type="button"
           className="v8-btn-primary wbn-final-cta-btn"
-          onClick={handleCtaClick}
+          onClick={() => handleCtaClick("final")}
           style={{ marginTop: 28 }}
         >
           Reserve my spot{" "}
