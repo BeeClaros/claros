@@ -59,10 +59,14 @@ const WORKFLOW_GROUPS: { label?: string; options: string[] }[] = [
 
 /* ── Helpers ──────────────────────────────────────────────────────── */
 
-function scrollToRegister() {
+function isRegisterHash() {
+  return window.location.hash.replace(/^#/, "") === "register";
+}
+
+function scrollToRegister(behavior: ScrollBehavior = "smooth") {
   document
     .getElementById("register")
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    ?.scrollIntoView({ behavior, block: "start" });
 }
 
 /* Returns UTM + utm_term params only — safe to send to analytics (no PII). */
@@ -112,6 +116,9 @@ function analyticsProps(
 function handleCtaClick(source: CtaSource) {
   lastCtaSource = source;
   track("webinar_register_cta_click", analyticsProps(getUtmParams(), source));
+  if (window.location.hash !== "#register") {
+    window.history.pushState(null, "", "#register");
+  }
   scrollToRegister();
 }
 
@@ -128,24 +135,26 @@ const WORKFLOWS: {
     num: "01",
     title: "Estimate → Next Sales Action",
     description:
-      "See how estimate status, customer activity and context can identify which opportunities actually need attention and what should happen next.",
+      "Estimate status, customer activity and relevant context change. The workflow identifies which opportunities actually need attention — so sales sees what should happen next instead of manually reviewing every estimate.",
     outcome: "Focus sales effort where action is actually required.",
   },
   {
     num: "02",
     title: "Sold Job → Production Ready",
     description:
-      "See how a sold job can be checked for the information and dependencies required before production begins.",
+      "When a job is marked sold, the workflow checks whether the required information and dependencies are ready before production begins.",
     examples:
       "scope, contract, selections, deposit, materials, crew and documentation",
-    outcome: "Make blocked jobs visible before they turn into coordination work.",
+    outcome:
+      "Blocked jobs become visible before production scheduling creates additional coordination.",
   },
   {
     num: "03",
     title: "Active Job → Exception Visibility",
     description:
-      "See how operational or financial changes can surface only the jobs that need human attention.",
-    outcome: "Manage exceptions instead of manually checking every job.",
+      "When operational or financial information changes, the workflow identifies whether human attention is required.",
+    outcome:
+      "Operations works from exceptions instead of manually checking every active job.",
   },
 ];
 
@@ -160,7 +169,7 @@ const DEMO_STEPS = [
 const PIPELINE_NODES = [
   "Existing Systems",
   "Operational Context",
-  "Decision",
+  "AI + Business Rules",
   "Next Action",
   "Human Review",
 ];
@@ -170,6 +179,25 @@ const PIPELINE_NODES = [
 export default function RoofingWebinarLanding() {
   useEffect(() => {
     track("webinar_landing_view", analyticsProps(getUtmParams()));
+  }, []);
+
+  useEffect(() => {
+    const jumpToForm = (behavior: ScrollBehavior = "auto") => {
+      if (!isRegisterHash()) return;
+      scrollToRegister(behavior);
+    };
+
+    jumpToForm("auto");
+    const frame = requestAnimationFrame(() => jumpToForm("auto"));
+    const timeout = window.setTimeout(() => jumpToForm("auto"), 80);
+
+    const onHashChange = () => jumpToForm("smooth");
+    window.addEventListener("hashchange", onHashChange);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timeout);
+      window.removeEventListener("hashchange", onHashChange);
+    };
   }, []);
 
   return (
@@ -203,9 +231,9 @@ function HeroSection() {
             </div>
             <h1 className="wbn-hero-h1">{WEBINAR_TITLE}</h1>
             <p className="wbn-hero-sub">
-              See how estimate follow-up, sold-job handoff and production
-              exceptions can become coordinated workflows around the systems you
-              already use.
+              See how AI and automation can turn estimate follow-up, sold-job
+              handoff and production exceptions into coordinated workflows around
+              the systems you already use.
             </p>
             <button
               type="button"
@@ -266,8 +294,31 @@ function HeroSection() {
 }
 
 /* ================================================================
-   SECTION 2 — WHAT YOU WILL SEE (workflows + demo merged)
+   SECTION 2 — WHAT YOU WILL SEE (workflows + AI fits + demo)
    ================================================================ */
+
+const AI_FLOW_STAGES = [
+  {
+    title: "System trigger",
+    desc: "Something changes in the CRM, estimate, job or supporting system.",
+  },
+  {
+    title: "Business context",
+    desc: "Relevant job data, activity, notes and documents are brought together.",
+  },
+  {
+    title: "AI + rules",
+    desc: "AI interprets unstructured information while business rules keep the workflow controlled.",
+  },
+  {
+    title: "Next action",
+    desc: "The workflow prepares, recommends or triggers the appropriate next step.",
+  },
+  {
+    title: "Human review",
+    desc: "People remain in control wherever judgment or approval matters.",
+  },
+];
 
 function WhatYouWillSeeSection() {
   return (
@@ -281,9 +332,9 @@ function WhatYouWillSeeSection() {
           </h2>
           <p className="v8-lead" style={{ marginTop: 20, maxWidth: 700 }}>
             Most roofing companies already have capable CRM, estimating,
-            production and accounting systems. The opportunity is often in what
-            happens between them: deciding what needs attention, what is ready
-            to move forward and where a human needs to step in.
+            production and accounting systems. The gap is often in what happens
+            between them — the right job surfaced to the right person when
+            something changes.
           </p>
           <div className="wbn-workflows">
             {WORKFLOWS.map((w) => (
@@ -305,6 +356,46 @@ function WhatYouWillSeeSection() {
         </div>
       </div>
 
+      {/* Mid: Where AI actually fits */}
+      <div className="wbn-ai-section">
+        <div className="wbn-container">
+          <h3 className="wbn-ai-headline">Where AI actually fits</h3>
+          <p className="wbn-ai-intro">
+            Not every step needs AI. Some actions are simple automation. AI
+            becomes useful when the workflow has to understand context before
+            deciding what deserves attention or what should happen next.
+          </p>
+          <div className="wbn-ai-flow">
+            {AI_FLOW_STAGES.map((stage, i) => (
+              <div key={i} className="wbn-ai-node-wrap">
+                {i > 0 && (
+                  <span className="wbn-ai-arrow" aria-hidden="true">
+                    <svg width="16" height="8" viewBox="0 0 16 8" fill="none">
+                      <path
+                        d="M0 4h12m0 0l-3-3m3 3l-3 3"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                )}
+                <div className="wbn-ai-node">
+                  <span className="wbn-ai-node-title">{stage.title}</span>
+                  <span className="wbn-ai-node-desc">{stage.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="wbn-ai-note">
+            The difference is not adding another tool. It is allowing the
+            systems you already use to share enough context for the workflow to
+            know what should happen next.
+          </p>
+        </div>
+      </div>
+
       {/* Bottom: pipeline diagram + demo steps (dark) */}
       <div className="wbn-combined-bottom">
         <div className="wbn-container">
@@ -312,9 +403,10 @@ function WhatYouWillSeeSection() {
             See the workflow, not another slide&nbsp;deck
           </h3>
           <p className="wbn-combined-bottom-sub">
-            The webinar includes a practical working example, from start to
-            finish, showing how a single roofing workflow moves through its
-            lifecycle.
+            We will walk through a working example showing how an operational
+            event becomes context, a decision, a next action and human review.
+            The goal is to make the workflow understandable enough that you can
+            map the same logic to your own operation.
           </p>
 
           <div className="wbn-pipeline">
@@ -353,20 +445,39 @@ function WhatYouWillSeeSection() {
             ))}
           </ol>
 
-          <p className="wbn-demo-followup">
-            When the job is sold, the same workflow context shifts from sales
-            follow-up to production readiness.
-          </p>
-
           <div className="wbn-takeaway">
             <p className="wbn-takeaway-title">
-              Leave with a simple way to identify which workflow in your roofing
-              operation is worth improving first.
+              Leave knowing which workflow is worth improving first
             </p>
             <p className="wbn-takeaway-sub">
-              Not a list of AI tools. A framework for choosing one operational
-              workflow with a clear business reason to fix it.
+              You should leave the session able to look at your own operation
+              and identify where manual coordination, fragmented context or
+              repeated decisions make a workflow worth testing.
             </p>
+            <p className="wbn-takeaway-secondary">
+              Not a list of AI tools. A practical way to choose one operational
+              workflow with a clear business reason to improve it.
+            </p>
+          </div>
+
+          <div className="wbn-for-you">
+            <p className="wbn-for-you-title">
+              This session will be most useful if&hellip;
+            </p>
+            <ul className="wbn-for-you-list">
+              <li>
+                Your team already uses CRM, estimating, production or accounting
+                software, but work still gets coordinated manually between them.
+              </li>
+              <li>
+                Important follow-up or job decisions still depend on someone
+                noticing the right information at the right time.
+              </li>
+              <li>
+                You want to understand where AI is genuinely useful before
+                buying or building another tool.
+              </li>
+            </ul>
           </div>
 
           <div style={{ marginTop: 40, textAlign: "center" }}>
@@ -921,11 +1032,15 @@ const FAQS = [
   },
   {
     q: "Is this an AI webinar?",
-    a: "The webinar will show where intelligent automation can help, but the focus is practical roofing workflows, existing systems and measurable operational outcomes.",
+    a: "AI is part of the session, but it is not the starting point. We will show where normal automation is enough, where AI can help interpret business context, and where human judgment should remain in the workflow. The focus is on improving roofing operations, not demonstrating AI for its own sake.",
   },
   {
-    q: "Do I need a specific roofing CRM?",
-    a: "No. The concepts are designed around workflows and can be applied across different technology stacks.",
+    q: "Will this work with the systems we already use?",
+    a: "The webinar is designed around the idea that your existing systems stay in place. The examples focus on coordinating context and next actions across the tools already used in the business rather than replacing the core CRM or operational platform.",
+  },
+  {
+    q: "Do I need to understand AI or automation?",
+    a: "No. The session is designed for business and operations leaders. We will explain the workflow in operational terms and show the technology only where it helps explain what is happening.",
   },
 ];
 
@@ -995,17 +1110,21 @@ function FinalCtaSection() {
           style={{
             marginTop: 16,
             color: "var(--v8-on-dark-secondary)",
-            maxWidth: 480,
+            maxWidth: 520,
             marginInline: "auto",
           }}
         >
-          Join the live session or register to receive the recording afterwards.
+          Join the session to see the workflow in practice and leave with a
+          clearer idea of where AI and automation are worth applying first.
+        </p>
+        <p className="wbn-final-cta-meta">
+          Live session · Recording included · Free to attend
         </p>
         <button
           type="button"
           className="v8-btn-primary wbn-final-cta-btn"
           onClick={() => handleCtaClick("final")}
-          style={{ marginTop: 28 }}
+          style={{ marginTop: 4 }}
         >
           Reserve my spot{" "}
           <span className="v8-arrow" aria-hidden="true">
@@ -1509,6 +1628,7 @@ function PageStyles() {
       .wbn-register {
         background: var(--v8-bg-contrast);
         border-top: 1px solid var(--v8-line);
+        scroll-margin-top: 64px;
       }
 
       .wbn-form-layout {
@@ -1837,10 +1957,197 @@ function PageStyles() {
         transition: max-height 300ms ease, opacity 300ms ease, padding-bottom 300ms ease;
       }
 
+      /* ── AI fits section ─────────────────────────────────────── */
+      .wbn-ai-section {
+        padding-block: clamp(3rem, 6vw, 4.5rem);
+        background: var(--v8-bg-contrast);
+        border-top: 1px solid var(--v8-line);
+        border-bottom: 1px solid var(--v8-line);
+      }
+
+      .wbn-ai-headline {
+        font-family: var(--font-v8-display, sans-serif);
+        font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: var(--v8-text-primary);
+        margin: 0;
+      }
+
+      .wbn-ai-intro {
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+        line-height: 1.65;
+        color: var(--v8-text-secondary);
+        margin: 14px 0 0;
+        max-width: 640px;
+      }
+
+      .wbn-ai-flow {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 8px 0;
+        margin-top: 32px;
+      }
+
+      .wbn-ai-node-wrap {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .wbn-ai-arrow {
+        color: var(--v8-text-muted);
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        margin-top: 18px;
+        flex-shrink: 0;
+      }
+
+      .wbn-ai-node {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 14px 18px;
+        border: 1px solid var(--v8-line);
+        border-radius: var(--v8-radius);
+        background: var(--v8-bg-secondary);
+        max-width: 160px;
+      }
+
+      .wbn-ai-node-title {
+        font-family: var(--font-v8-mono, monospace);
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--v8-lime-deep);
+        line-height: 1.3;
+      }
+
+      .wbn-ai-node-desc {
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.8125rem;
+        line-height: 1.55;
+        color: var(--v8-text-secondary);
+      }
+
+      .wbn-ai-note {
+        margin-top: 28px;
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--v8-text-muted);
+        max-width: 600px;
+        font-style: italic;
+      }
+
+      @media (max-width: 900px) {
+        .wbn-ai-flow {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+          flex-wrap: nowrap;
+        }
+        .wbn-ai-node-wrap {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .wbn-ai-arrow {
+          padding: 4px 0 4px 14px;
+          transform: rotate(90deg);
+          transform-origin: 8px center;
+          height: 24px;
+          margin-top: 0;
+        }
+        .wbn-ai-node {
+          max-width: 100%;
+          width: 100%;
+          flex-direction: row;
+          gap: 12px;
+          align-items: baseline;
+        }
+        .wbn-ai-node-title {
+          flex-shrink: 0;
+          width: 110px;
+        }
+      }
+
+      /* ── Takeaway secondary line ──────────────────────────────── */
+      .wbn-takeaway-secondary {
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--v8-on-dark-muted);
+        margin: 10px 0 0;
+      }
+
+      /* ── For you block ────────────────────────────────────────── */
+      .wbn-for-you {
+        margin-top: 36px;
+        padding: 24px 28px;
+        border: 1px solid var(--v8-on-dark-line);
+        border-radius: var(--v8-radius);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .wbn-for-you-title {
+        font-family: var(--font-v8-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--v8-on-dark-secondary);
+        margin: 0 0 16px;
+      }
+
+      .wbn-for-you-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .wbn-for-you-list li {
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        color: var(--v8-on-dark-secondary);
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .wbn-for-you-list li::before {
+        content: "–";
+        position: absolute;
+        left: 0;
+        color: var(--v8-lime);
+        font-weight: 500;
+      }
+
+      @media (max-width: 640px) {
+        .wbn-for-you {
+          padding: 20px 20px;
+        }
+      }
+
       /* ── Final CTA ───────────────────────────────────────────── */
       .wbn-final-cta {
         background: var(--v8-bg-dark);
         padding-block: clamp(4rem, 8vw, 6rem);
+      }
+
+      .wbn-final-cta-meta {
+        margin-top: 20px;
+        font-family: var(--font-v8-mono, monospace);
+        font-size: 0.6875rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--v8-on-dark-muted);
       }
 
       .wbn-final-cta-btn {
