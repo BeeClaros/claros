@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { track } from "@vercel/analytics/react";
 
 /* ── Replace with your Google Apps Script deployment URL ────────── */
 // TODO: replace with actual Google Apps Script / Google Sheets endpoint
 const FORM_ENDPOINT =
-  "https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec";
+  "https://script.google.com/macros/s/AKfycbyzv4BTnwxsOUpimWiG5DpyGhCaITpVxH0Mg9APgpRbnpdCov8BTukLv83Mbw4cecEU/exec";
 
 const WEBINAR_TITLE =
   "How Roofing Companies Can Remove Manual Coordination from Estimate to Production";
@@ -67,7 +68,13 @@ function scrollToRegister() {
 function getUtmParams(): Record<string, string> {
   if (typeof window === "undefined") return {};
   const sp = new URLSearchParams(window.location.search);
-  const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+  const keys = [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "cid",
+  ];
   const out: Record<string, string> = {};
   for (const k of keys) {
     const v = sp.get(k);
@@ -76,9 +83,72 @@ function getUtmParams(): Record<string, string> {
   return out;
 }
 
+function trackingBase(utms: Record<string, string>) {
+  return { webinar_id: "roofing_oct_2026_v1", vertical: "roofing", ...utms };
+}
+
+function handleCtaClick() {
+  track("webinar_register_cta_click", trackingBase(getUtmParams()));
+  scrollToRegister();
+}
+
+/* ── Data ─────────────────────────────────────────────────────────── */
+
+const WORKFLOWS: {
+  num: string;
+  title: string;
+  description: string;
+  examples?: string;
+  outcome: string;
+}[] = [
+  {
+    num: "01",
+    title: "Estimate → Next Sales Action",
+    description:
+      "See how estimate status, customer activity and context can identify which opportunities actually need attention and what should happen next.",
+    outcome: "Focus sales effort where action is actually required.",
+  },
+  {
+    num: "02",
+    title: "Sold Job → Production Ready",
+    description:
+      "See how a sold job can be checked for the information and dependencies required before production begins.",
+    examples:
+      "scope, contract, selections, deposit, materials, crew and documentation",
+    outcome: "Make blocked jobs visible before they turn into coordination work.",
+  },
+  {
+    num: "03",
+    title: "Active Job → Exception Visibility",
+    description:
+      "See how operational or financial changes can surface only the jobs that need human attention.",
+    outcome: "Manage exceptions instead of manually checking every job.",
+  },
+];
+
+const DEMO_STEPS = [
+  "An estimate is sent",
+  "Business context changes",
+  "The workflow detects what needs attention",
+  "A next action is recommended",
+  "A human reviews it and the workflow advances",
+];
+
+const PIPELINE_NODES = [
+  "Existing Systems",
+  "Operational Context",
+  "Decision",
+  "Next Action",
+  "Human Review",
+];
+
 /* ── Main component ───────────────────────────────────────────────── */
 
 export default function RoofingWebinarLanding() {
+  useEffect(() => {
+    track("webinar_landing_view", trackingBase(getUtmParams()));
+  }, []);
+
   return (
     <>
       <PageStyles />
@@ -110,14 +180,14 @@ function HeroSection() {
             </div>
             <h1 className="wbn-hero-h1">{WEBINAR_TITLE}</h1>
             <p className="wbn-hero-sub">
-              Learn where automation fits in your roofing operation, see three
-              practical workflows demonstrated live, and understand how to
-              connect the systems you already use into a coordinated process.
+              See how estimate follow-up, sold-job handoff and production
+              exceptions can become coordinated workflows around the systems you
+              already use.
             </p>
             <button
               type="button"
               className="v8-btn-primary wbn-hero-cta"
-              onClick={scrollToRegister}
+              onClick={handleCtaClick}
             >
               Reserve my spot{" "}
               <span className="v8-arrow" aria-hidden="true">
@@ -139,6 +209,10 @@ function HeroSection() {
               </span>
               <span>Recording available</span>
             </div>
+            <p className="wbn-qualify">
+              Built for roofing owners, Presidents, CEOs, COOs, GMs and
+              operations leaders.
+            </p>
           </div>
           <div className="wbn-hero-aside">
             <div className="wbn-hero-card">
@@ -146,15 +220,15 @@ function HeroSection() {
               <div className="wbn-hero-card-items">
                 <div className="wbn-hero-card-item">
                   <span className="wbn-hero-card-num">01</span>
-                  <span>Where automation creates value in roofing ops</span>
+                  <span>Estimate follow-up that knows what needs attention</span>
                 </div>
                 <div className="wbn-hero-card-item">
                   <span className="wbn-hero-card-num">02</span>
-                  <span>Three workflows demonstrated with your existing systems</span>
+                  <span>Sold jobs checked for production readiness</span>
                 </div>
                 <div className="wbn-hero-card-item">
                   <span className="wbn-hero-card-num">03</span>
-                  <span>How to identify one workflow worth testing first</span>
+                  <span>Exceptions surfaced before they become manual chasing</span>
                 </div>
               </div>
               <div className="wbn-hero-card-footer">
@@ -172,69 +246,21 @@ function HeroSection() {
    SECTION 2 — WHAT YOU WILL SEE (workflows + demo merged)
    ================================================================ */
 
-const WORKFLOWS = [
-  {
-    num: "01",
-    title: "Estimate → Next Sales Action",
-    description:
-      "See how estimate status, customer activity and relevant context can determine which estimates need attention and what the next action should be.",
-    outcome:
-      "Help the sales team focus on the opportunities that actually need action.",
-  },
-  {
-    num: "02",
-    title: "Sold Job → Production Ready",
-    description:
-      "See how a sold job can be checked for the operational context required before production starts: scope, contract, customer selections, deposit, materials, crew and documentation.",
-    outcome:
-      "Reduce unnecessary coordination and make blocked jobs visible earlier.",
-  },
-  {
-    num: "03",
-    title: "Active Job → Exception Visibility",
-    description:
-      "See how operational or financial changes can surface only the jobs that require human attention, without manually reviewing every job.",
-    outcome:
-      "Give owners and operations teams better visibility without the manual overhead.",
-  },
-];
-
-const DEMO_STEPS = [
-  "An estimate is created or sent",
-  "Business context changes",
-  "The workflow identifies what requires attention",
-  "A recommended next action is produced",
-  "A human reviews the decision",
-  "When the job changes state, the workflow changes with it",
-  "Once sold, the focus moves from sales follow-up to production readiness",
-];
-
-const PIPELINE_NODES = [
-  "Existing Systems",
-  "Operational Context",
-  "Decision",
-  "Next Action",
-  "Human Review",
-];
-
 function WhatYouWillSeeSection() {
   return (
     <section className="wbn-combined">
       {/* Top: intro + workflow cards */}
       <div className="wbn-combined-top">
         <div className="wbn-container">
-          <p className="v8-overline">What the webinar covers</p>
-          <h2 className="v8-section-title" style={{ marginTop: 16 }}>
-            Where automation fits in your roofing operation, and how it works
-            in&nbsp;practice
+          <h2 className="v8-section-title">
+            Three roofing workflows where better coordination can create
+            immediate operational leverage
           </h2>
           <p className="v8-lead" style={{ marginTop: 20, maxWidth: 700 }}>
-            Most roofing companies already have capable systems for CRM,
-            estimating, production and accounting. The opportunity is usually
-            not another tool. It is making those systems produce the right next
-            action across sales, production and finance. We will show you where
-            intelligent automation helps, where human judgment should stay, and
-            demonstrate three specific workflows live.
+            Most roofing companies already have capable CRM, estimating,
+            production and accounting systems. The opportunity is often in what
+            happens between them: deciding what needs attention, what is ready
+            to move forward and where a human needs to step in.
           </p>
           <div className="wbn-workflows">
             {WORKFLOWS.map((w) => (
@@ -246,6 +272,9 @@ function WhatYouWillSeeSection() {
                 <p className="v8-body" style={{ marginTop: 16 }}>
                   {w.description}
                 </p>
+                {w.examples && (
+                  <p className="wbn-wf-examples">{w.examples}</p>
+                )}
                 <p className="wbn-wf-outcome">{w.outcome}</p>
               </div>
             ))}
@@ -256,9 +285,7 @@ function WhatYouWillSeeSection() {
       {/* Bottom: pipeline diagram + demo steps (dark) */}
       <div className="wbn-combined-bottom">
         <div className="wbn-container">
-          <h3
-            className="wbn-combined-bottom-title"
-          >
+          <h3 className="wbn-combined-bottom-title">
             See the workflow, not another slide&nbsp;deck
           </h3>
           <p className="wbn-combined-bottom-sub">
@@ -303,11 +330,27 @@ function WhatYouWillSeeSection() {
             ))}
           </ol>
 
-          <div style={{ marginTop: 48, textAlign: "center" }}>
+          <p className="wbn-demo-followup">
+            When the job is sold, the same workflow context shifts from sales
+            follow-up to production readiness.
+          </p>
+
+          <div className="wbn-takeaway">
+            <p className="wbn-takeaway-title">
+              Leave with a simple way to identify which workflow in your roofing
+              operation is worth improving first.
+            </p>
+            <p className="wbn-takeaway-sub">
+              Not a list of AI tools. A framework for choosing one operational
+              workflow with a clear business reason to fix it.
+            </p>
+          </div>
+
+          <div style={{ marginTop: 40, textAlign: "center" }}>
             <button
               type="button"
               className="v8-btn-primary"
-              onClick={scrollToRegister}
+              onClick={handleCtaClick}
             >
               Reserve my spot{" "}
               <span className="v8-arrow" aria-hidden="true">
@@ -334,12 +377,13 @@ function RecordingCallout() {
             Can&apos;t make the live session?
           </h3>
           <p className="v8-body">
-            Register anyway and we&apos;ll send you the recording afterwards.
+            Register anyway. We&apos;ll send the recording to everyone who signs
+            up, so you can watch it when it suits you.
           </p>
           <button
             type="button"
             className="v8-btn-primary"
-            onClick={scrollToRegister}
+            onClick={handleCtaClick}
             style={{ marginTop: 20 }}
           >
             Reserve my spot{" "}
@@ -479,13 +523,18 @@ function MultiSelectDropdown({
 
 function RegistrationSection() {
   const [form, setForm] = useState<FormData>(INITIAL_FORM);
+  const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const utmRef = useRef<Record<string, string>>({});
+  const formLoadTimeRef = useRef<number>(Date.now());
+  const hasStarted = useRef(false);
 
-  useEffect(() => {
-    utmRef.current = getUtmParams();
+  const handleFormFocus = useCallback(() => {
+    if (!hasStarted.current) {
+      hasStarted.current = true;
+      track("webinar_form_start", trackingBase(getUtmParams()));
+    }
   }, []);
 
   const handleChange = useCallback(
@@ -527,6 +576,12 @@ function RegistrationSection() {
       e.preventDefault();
       setError("");
 
+      // Silent bot checks — no feedback given
+      if (honeypot) return;
+      if (Date.now() - formLoadTimeRef.current < 3000) return;
+
+      track("webinar_registration_submit_attempt", trackingBase(getUtmParams()));
+
       const required: (keyof FormData)[] = ["firstName", "lastName", "workEmail"];
       const newTouched: Record<string, boolean> = {};
       for (const k of required) newTouched[k] = true;
@@ -548,6 +603,7 @@ function RegistrationSection() {
 
       const existingSystems = joinForSheets(form.existingSystems);
       const workflowInterest = joinForSheets(form.workflowInterest);
+      const utms = getUtmParams();
 
       const payload = {
         firstName: form.firstName,
@@ -562,27 +618,33 @@ function RegistrationSection() {
         webinar_title: WEBINAR_TITLE,
         landing_page:
           typeof window !== "undefined" ? window.location.href : "",
-        ...utmRef.current,
+        ...utms,
       };
 
       setSubmitting(true);
 
       try {
-        const res = await fetch(FORM_ENDPOINT, {
+        // Google Apps Script does not include CORS headers on preflight
+        // responses. Using text/plain avoids the preflight and no-cors lets
+        // the browser send the request without one. The response is opaque
+        // so we cannot read it — assume success on resolve.
+        await fetch(FORM_ENDPOINT, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Submission failed");
+        track("webinar_registration_success", trackingBase(utms));
         window.location.href = "/webinars/roofing-october-2026/thank-you/";
       } catch {
+        track("webinar_registration_error", trackingBase(utms));
         setError(
           "Something went wrong. Please try again or email hello@beeclaros.com.",
         );
         setSubmitting(false);
       }
     },
-    [form],
+    [form, honeypot],
   );
 
   return (
@@ -635,13 +697,41 @@ function RegistrationSection() {
                   <circle cx="8" cy="8" r="7" stroke="var(--v8-lime-deep)" strokeWidth="1.5" />
                   <path d="M5 8l2 2 4-4" stroke="var(--v8-lime-deep)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span>No sales pitch</span>
+                <span>Practical, workflow-first session</span>
               </div>
             </div>
           </div>
 
           <div className="wbn-form-card">
-            <form onSubmit={handleSubmit} className="wbn-form" noValidate>
+            <form
+              onSubmit={handleSubmit}
+              onFocus={handleFormFocus}
+              className="wbn-form"
+              noValidate
+            >
+              {/* Honeypot — hidden from users, readable by screen readers as decorative */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  pointerEvents: "none",
+                  height: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <label htmlFor="wbn-hp-website">Website</label>
+                <input
+                  id="wbn-hp-website"
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="wbn-field-grid">
                 <label className="wbn-field">
                   <span className="wbn-field-label">
@@ -748,6 +838,15 @@ function RegistrationSection() {
                 )}
               </button>
 
+              {/* TODO: add href to privacy policy route when /privacy or equivalent route is available */}
+              <p className="wbn-privacy-note">
+                We&apos;ll use your details to manage your webinar registration
+                and send the recording.{" "}
+                <a href="#" aria-label="Privacy policy">
+                  Privacy policy
+                </a>
+              </p>
+
               <p className="wbn-form-note">
                 Early October · Exact date to be confirmed · Recording included
               </p>
@@ -841,7 +940,7 @@ function FinalCtaSection() {
           className="v8-section-title"
           style={{ color: "var(--v8-on-dark-primary)" }}
         >
-          Ready to see the workflow in action?
+          See what this could look like inside a roofing operation
         </h2>
         <p
           className="v8-lead"
@@ -852,12 +951,12 @@ function FinalCtaSection() {
             marginInline: "auto",
           }}
         >
-          Register now. Attend live or watch the recording at your convenience.
+          Join the live session or register to receive the recording afterwards.
         </p>
         <button
           type="button"
-          className="v8-btn-primary"
-          onClick={scrollToRegister}
+          className="v8-btn-primary wbn-final-cta-btn"
+          onClick={handleCtaClick}
           style={{ marginTop: 28 }}
         >
           Reserve my spot{" "}
@@ -963,7 +1062,7 @@ function PageStyles() {
 
       .wbn-hero-cta {
         margin-top: 28px;
-        height: 54px;
+        min-height: 54px;
         padding-inline: 36px;
         font-size: 0.875rem;
       }
@@ -983,6 +1082,16 @@ function PageStyles() {
 
       .wbn-info-sep {
         color: var(--v8-line-strong);
+      }
+
+      .wbn-qualify {
+        margin-top: 12px;
+        font-family: var(--font-v8-mono, monospace);
+        font-size: 0.6875rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--v8-text-muted);
+        line-height: 1.5;
       }
 
       /* Hero aside card */
@@ -1059,6 +1168,9 @@ function PageStyles() {
       }
 
       @media (max-width: 480px) {
+        .wbn-hero {
+          padding-top: clamp(2rem, 6vw, 3rem);
+        }
         .wbn-hero-cta {
           width: 100%;
           justify-content: center;
@@ -1143,6 +1255,15 @@ function PageStyles() {
         margin: 0;
       }
 
+      .wbn-wf-examples {
+        margin-top: 10px;
+        font-family: var(--font-v8-mono, monospace);
+        font-size: 0.6875rem;
+        letter-spacing: 0.05em;
+        color: var(--v8-text-muted);
+        line-height: 1.6;
+      }
+
       .wbn-wf-outcome {
         margin-top: auto;
         padding-top: 20px;
@@ -1212,6 +1333,32 @@ function PageStyles() {
         color: var(--v8-lime-deep);
       }
 
+      /* Vertical pipeline on narrow mobile */
+      @media (max-width: 480px) {
+        .wbn-pipeline {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+          flex-wrap: nowrap;
+        }
+        .wbn-pipe-node-wrap {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .wbn-pipe-arrow {
+          padding: 4px 0 4px 20px;
+          transform: rotate(90deg);
+          transform-origin: 10px center;
+          height: 24px;
+        }
+        .wbn-pipe-node {
+          white-space: normal;
+          width: 100%;
+          font-size: 0.75rem;
+          padding: 10px 16px;
+        }
+      }
+
       .wbn-demo-steps {
         list-style: none;
         padding: 0;
@@ -1243,22 +1390,47 @@ function PageStyles() {
         text-align: right;
       }
 
+      .wbn-demo-followup {
+        margin-top: 24px;
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: var(--v8-on-dark-muted);
+        max-width: 600px;
+      }
+
+      /* ── Takeaway block ───────────────────────────────────────── */
+      .wbn-takeaway {
+        margin-top: 40px;
+        padding: 24px 28px;
+        border-left: 3px solid var(--v8-lime);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 0 4px 4px 0;
+      }
+
+      .wbn-takeaway-title {
+        font-family: var(--font-v8-display, sans-serif);
+        font-size: clamp(1rem, 1.5vw, 1.125rem);
+        font-weight: 500;
+        color: var(--v8-on-dark-primary);
+        margin: 0 0 8px;
+        line-height: 1.35;
+      }
+
+      .wbn-takeaway-sub {
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: var(--v8-on-dark-secondary);
+        margin: 0;
+      }
+
       @media (max-width: 640px) {
         .wbn-demo-steps {
           grid-template-columns: 1fr;
         }
-        .wbn-pipeline {
-          gap: 8px;
-        }
-        .wbn-pipe-node-wrap {
-          flex-wrap: wrap;
-        }
-        .wbn-pipe-arrow {
-          padding: 0 6px;
-        }
-        .wbn-pipe-node {
-          font-size: 0.6875rem;
-          padding: 8px 12px;
+        .wbn-takeaway {
+          padding: 20px 20px;
         }
       }
 
@@ -1329,11 +1501,13 @@ function PageStyles() {
         border-radius: 6px;
         padding: clamp(24px, 3vw, 36px);
         overflow: visible;
+        position: relative;
       }
 
       .wbn-form {
         display: flex;
         flex-direction: column;
+        position: relative;
       }
 
       .wbn-field-grid {
@@ -1435,6 +1609,7 @@ function PageStyles() {
         font-size: 0.875rem;
         color: var(--v8-text-primary);
         user-select: none;
+        min-height: 44px;
       }
 
       .wbn-ms-option:hover,
@@ -1479,6 +1654,7 @@ function PageStyles() {
         transition: border-color 200ms ease, box-shadow 200ms ease;
         outline: none;
         width: 100%;
+        box-sizing: border-box;
       }
 
       .wbn-input::placeholder {
@@ -1519,7 +1695,7 @@ function PageStyles() {
         margin-top: 24px;
         width: 100%;
         justify-content: center;
-        height: 52px;
+        min-height: 52px;
         font-size: 0.875rem;
       }
 
@@ -1528,8 +1704,23 @@ function PageStyles() {
         pointer-events: none;
       }
 
+      .wbn-privacy-note {
+        margin-top: 12px;
+        text-align: center;
+        font-family: var(--font-v8-sans, sans-serif);
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: var(--v8-text-muted);
+      }
+
+      .wbn-privacy-note a {
+        color: var(--v8-text-muted);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
       .wbn-form-note {
-        margin-top: 14px;
+        margin-top: 10px;
         text-align: center;
         font-family: var(--font-v8-mono, monospace);
         font-size: 0.6875rem;
@@ -1547,6 +1738,12 @@ function PageStyles() {
         }
         .wbn-field-grid {
           grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .wbn-form-card {
+          overflow-x: clip;
         }
       }
 
@@ -1575,6 +1772,7 @@ function PageStyles() {
         font-weight: 500;
         color: var(--v8-text-primary);
         line-height: 1.4;
+        min-height: 44px;
       }
 
       .wbn-faq-icon {
@@ -1595,6 +1793,17 @@ function PageStyles() {
       .wbn-final-cta {
         background: var(--v8-bg-dark);
         padding-block: clamp(4rem, 8vw, 6rem);
+      }
+
+      .wbn-final-cta-btn {
+        min-height: 52px;
+      }
+
+      @media (max-width: 480px) {
+        .wbn-final-cta-btn {
+          width: 100%;
+          justify-content: center;
+        }
       }
     `}</style>
   );

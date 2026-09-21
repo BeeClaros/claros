@@ -6,12 +6,16 @@ export const metadata: Metadata = {
     "How Roofing Companies Can Remove Manual Coordination from Estimate to Production | CLAROS Webinar",
   description:
     "Live webinar: see three practical workflows that turn estimates, sold jobs and production signals into the right next action — without replacing the systems you already use.",
+  alternates: {
+    canonical: "https://beeclaros.com/webinars/roofing-october-2026/",
+  },
   openGraph: {
     title:
       "How Roofing Companies Can Remove Manual Coordination from Estimate to Production",
     description:
       "Live webinar for roofing company owners and operations leaders. See practical workflow demonstrations for estimate follow-up, sold-job handoff and production visibility.",
     type: "website",
+    // TODO: add webinar OG image once a suitable asset is available
   },
   twitter: {
     card: "summary_large_image",
