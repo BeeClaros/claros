@@ -6,7 +6,7 @@ import { track } from "@vercel/analytics/react";
 /* ── Replace with your Google Apps Script deployment URL ────────── */
 // TODO: replace with actual Google Apps Script / Google Sheets endpoint
 const FORM_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbyzv4BTnwxsOUpimWiG5DpyGhCaITpVxH0Mg9APgpRbnpdCov8BTukLv83Mbw4cecEU/exec";
+  "https://script.google.com/macros/s/AKfycbzquyHxUFZK1Y8OMnfV1E9HBynEpmJoA3bbbW9W-8exS9aSUAgYFxoNYINosnsnnepD/exec";
 
 const WEBINAR_TITLE =
   "How Roofing Companies Can Remove Manual Coordination from Estimate to Production";
@@ -564,27 +564,79 @@ function joinForSheets(values: string[]): string {
   return values.join(", ");
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function postRegistration(payload: Record<string, string>) {
+  return fetch(FORM_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=UTF-8" },
+    body: JSON.stringify(payload),
+  });
+}
+
+function buildRegistrationPayload(
+  form: FormData,
+  status: "partial" | "submitted",
+): Record<string, string> {
+  const existingSystems = joinForSheets(form.existingSystems);
+  const workflowInterest = joinForSheets(form.workflowInterest);
+  const cid = getCid();
+  const referrer =
+    typeof document !== "undefined" ? document.referrer || "" : "";
+  const payload: Record<string, string> = {
+    firstName: form.firstName,
+    lastName: form.lastName,
+    workEmail: form.workEmail.trim(),
+    company: form.company,
+    existingSystems,
+    primaryRoofingSystem: existingSystems,
+    workflowInterest,
+    webinar_id: "roofing_oct_2026_v1",
+    vertical: "roofing",
+    webinar_title: WEBINAR_TITLE,
+    landing_page:
+      typeof window !== "undefined" ? window.location.href : "",
+    landing_version: "roofing_v1",
+    referrer,
+    cta_source: lastCtaSource,
+    status,
+    ...getUtmParams(),
+  };
+  if (cid) payload.cid = cid;
+  return payload;
+}
+
 function MultiSelectDropdown({
   groups,
   selected,
   onToggle,
+  onClose,
   placeholder = "Select...",
 }: {
   groups: { label?: string; options: string[] }[];
   selected: string[];
   onToggle: (value: string) => void;
+  onClose?: () => void;
   placeholder?: string;
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
+  const close = useCallback(() => {
+    setOpen((was) => {
+      if (was) onClose?.();
+      return false;
+    });
+  }, [onClose]);
+
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+      if (!wrapRef.current?.contains(e.target as Node)) close();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") close();
     };
     document.addEventListener("mousedown", onDoc);
     document.addEventListener("keydown", onKey);
@@ -592,7 +644,7 @@ function MultiSelectDropdown({
       document.removeEventListener("mousedown", onDoc);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, close]);
 
   const summary = selected.length === 0 ? placeholder : selected.join(", ");
 
@@ -603,7 +655,7 @@ function MultiSelectDropdown({
         className="wbn-input wbn-ms-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => (open ? close() : setOpen(true))}
       >
         <span className={selected.length === 0 ? "wbn-ms-placeholder" : undefined}>
           {summary}
@@ -664,11 +716,45 @@ function RegistrationSection() {
   const [formMounted, setFormMounted] = useState(false);
   const formLoadTimeRef = useRef<number>(Date.now());
   const hasStarted = useRef(false);
+  const formRef = useRef(form);
+  const honeypotRef = useRef(honeypot);
+  const submittedRef = useRef(false);
+  const lastPartialKey = useRef("");
+  formRef.current = form;
+  honeypotRef.current = honeypot;
 
   useEffect(() => {
     setFormMounted(true);
     formLoadTimeRef.current = Date.now();
   }, []);
+
+  const savePartial = useCallback((snapshot?: FormData) => {
+    if (submittedRef.current) return;
+    if (honeypotRef.current) return;
+    const current = snapshot ?? formRef.current;
+    const email = current.workEmail.trim();
+    if (!EMAIL_RE.test(email)) return;
+
+    const payload = buildRegistrationPayload(current, "partial");
+    const key = JSON.stringify(payload);
+    if (key === lastPartialKey.current) return;
+    lastPartialKey.current = key;
+
+    track("webinar_form_partial", analyticsProps(getUtmParams()));
+    void postRegistration(payload);
+  }, []);
+
+  useEffect(() => {
+    const flush = () => {
+      if (document.visibilityState === "hidden") savePartial();
+    };
+    document.addEventListener("visibilitychange", flush);
+    window.addEventListener("pagehide", flush);
+    return () => {
+      document.removeEventListener("visibilitychange", flush);
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [savePartial]);
 
   const handleFormFocus = useCallback(() => {
     if (!hasStarted.current) {
@@ -688,12 +774,25 @@ function RegistrationSection() {
     [touched],
   );
 
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      const { name } = e.target;
+      setTouched((prev) => ({ ...prev, [name]: true }));
+      savePartial();
+    },
+    [savePartial],
+  );
+
   const handleToggle = useCallback(
     (field: "existingSystems" | "workflowInterest", value: string) => {
-      setForm((prev) => ({
-        ...prev,
-        [field]: toggleMultiValue(prev[field], value),
-      }));
+      setForm((prev) => {
+        const next = {
+          ...prev,
+          [field]: toggleMultiValue(prev[field], value),
+        };
+        formRef.current = next;
+        return next;
+      });
     },
     [],
   );
@@ -704,7 +803,7 @@ function RegistrationSection() {
       if (name === "firstName" || name === "lastName") return !form[name].trim();
       if (name === "workEmail") {
         if (!form.workEmail.trim()) return true;
-        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.workEmail);
+        return !EMAIL_RE.test(form.workEmail);
       }
       return false;
     },
@@ -742,38 +841,15 @@ function RegistrationSection() {
         return;
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.workEmail)) {
+      if (!EMAIL_RE.test(form.workEmail)) {
         setError("Please enter a valid work email address.");
         return;
       }
 
-      const existingSystems = joinForSheets(form.existingSystems);
-      const workflowInterest = joinForSheets(form.workflowInterest);
-      const cid = getCid();
-      const referrer =
-        typeof document !== "undefined" ? document.referrer || "" : "";
-
-      const payload: Record<string, string> = {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        workEmail: form.workEmail,
-        company: form.company,
-        existingSystems,
-        primaryRoofingSystem: existingSystems,
-        workflowInterest,
-        webinar_id: "roofing_oct_2026_v1",
-        vertical: "roofing",
-        webinar_title: WEBINAR_TITLE,
-        landing_page:
-          typeof window !== "undefined" ? window.location.href : "",
-        landing_version: "roofing_v1",
-        referrer,
-        cta_source: ctaSource,
-        ...utms,
-      };
-      if (cid) payload.cid = cid;
+      const payload = buildRegistrationPayload(form, "submitted");
 
       setSubmitting(true);
+      submittedRef.current = true;
 
       try {
         // Google Apps Script does not include CORS headers on preflight
@@ -787,18 +863,14 @@ function RegistrationSection() {
         // it is impossible to inspect the status or body returned by the
         // Apps Script. Silent script-side failures (e.g. quota exceeded,
         // permission error) will not be detected here.
-        await fetch(FORM_ENDPOINT, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=UTF-8" },
-          body: JSON.stringify(payload),
-        });
+        await postRegistration(payload);
         track(
           "webinar_registration_success",
           analyticsProps(utms, ctaSource),
         );
         window.location.href = "/webinars/roofing-october-2026/thank-you/";
       } catch {
+        submittedRef.current = false;
         track(
           "webinar_registration_error",
           analyticsProps(utms, ctaSource),
@@ -910,6 +982,7 @@ function RegistrationSection() {
                     name="firstName"
                     value={form.firstName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
                     autoComplete="given-name"
                     className={`wbn-input${fieldError("firstName") ? " wbn-input-error" : ""}`}
@@ -926,6 +999,7 @@ function RegistrationSection() {
                     name="lastName"
                     value={form.lastName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
                     autoComplete="family-name"
                     className={`wbn-input${fieldError("lastName") ? " wbn-input-error" : ""}`}
@@ -942,6 +1016,7 @@ function RegistrationSection() {
                     name="workEmail"
                     value={form.workEmail}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
                     autoComplete="email"
                     className={`wbn-input${fieldError("workEmail") ? " wbn-input-error" : ""}`}
@@ -958,6 +1033,7 @@ function RegistrationSection() {
                     name="company"
                     value={form.company}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     autoComplete="organization"
                     className="wbn-input"
                     placeholder="Company name"
@@ -973,6 +1049,7 @@ function RegistrationSection() {
                     groups={EXISTING_SYSTEM_GROUPS}
                     selected={form.existingSystems}
                     onToggle={(value) => handleToggle("existingSystems", value)}
+                    onClose={savePartial}
                     placeholder="Select all that apply..."
                   />
                 </div>
@@ -986,6 +1063,7 @@ function RegistrationSection() {
                     groups={WORKFLOW_GROUPS}
                     selected={form.workflowInterest}
                     onToggle={(value) => handleToggle("workflowInterest", value)}
+                    onClose={savePartial}
                     placeholder="Select all that apply..."
                   />
                 </div>
