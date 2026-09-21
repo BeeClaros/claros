@@ -33,11 +33,6 @@ export default function WebinarLayout({
           </a>
         </header>
         {children}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){if(location.hash!=='#register')return;var el=document.getElementById('register');if(el)el.scrollIntoView({block:'start'});})();`,
-          }}
-        />
       </div>
     </>
   );

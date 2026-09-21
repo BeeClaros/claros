@@ -661,8 +661,14 @@ function RegistrationSection() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [formMounted, setFormMounted] = useState(false);
   const formLoadTimeRef = useRef<number>(Date.now());
   const hasStarted = useRef(false);
+
+  useEffect(() => {
+    setFormMounted(true);
+    formLoadTimeRef.current = Date.now();
+  }, []);
 
   const handleFormFocus = useCallback(() => {
     if (!hasStarted.current) {
@@ -862,6 +868,9 @@ function RegistrationSection() {
           </div>
 
           <div className="wbn-form-card">
+            {!formMounted ? (
+              <div className="wbn-form wbn-form-placeholder" aria-hidden="true" />
+            ) : (
             <form
               onSubmit={handleSubmit}
               onFocus={handleFormFocus}
@@ -1010,6 +1019,7 @@ function RegistrationSection() {
                 Early October · Exact date to be confirmed · Recording included
               </p>
             </form>
+            )}
           </div>
         </div>
       </div>
@@ -1676,6 +1686,10 @@ function PageStyles() {
         display: flex;
         flex-direction: column;
         position: relative;
+      }
+
+      .wbn-form-placeholder {
+        min-height: 28rem;
       }
 
       .wbn-field-grid {
