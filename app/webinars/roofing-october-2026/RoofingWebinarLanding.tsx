@@ -135,44 +135,38 @@ const WORKFLOWS: {
     num: "01",
     title: "Estimate → Next Sales Action",
     description:
-      "Estimate status, customer activity and relevant context change. The workflow identifies which opportunities actually need attention — so sales sees what should happen next instead of manually reviewing every estimate.",
-    outcome: "Focus sales effort where action is actually required.",
+      "Estimate status, customer activity or other context changes. The workflow identifies which opportunities actually need attention.",
+    outcome:
+      "Less manual pipeline checking. Sales focuses on the estimates that need a next action.",
   },
   {
     num: "02",
     title: "Sold Job → Production Ready",
     description:
-      "When a job is marked sold, the workflow checks whether the required information and dependencies are ready before production begins.",
+      "A job is marked sold. The workflow checks whether the information needed for production is actually ready.",
     examples:
       "scope, contract, selections, deposit, materials, crew and documentation",
     outcome:
-      "Blocked jobs become visible before production scheduling creates additional coordination.",
+      "Missing pieces become visible before the job reaches scheduling or production.",
   },
   {
     num: "03",
     title: "Active Job → Exception Visibility",
     description:
-      "When operational or financial information changes, the workflow identifies whether human attention is required.",
+      "Job or financial information changes. The workflow identifies which active jobs actually need someone's attention.",
     outcome:
-      "Operations works from exceptions instead of manually checking every active job.",
+      "Managers work from exceptions instead of checking every job just to find the problems.",
   },
 ];
 
 const DEMO_STEPS = [
-  "An estimate is sent",
-  "Business context changes",
-  "The workflow detects what needs attention",
-  "A next action is recommended",
-  "A human reviews it and the workflow advances",
+  "An estimate or job event changes",
+  "Relevant context is pulled together",
+  "The workflow identifies what needs attention",
+  "A next action is prepared or recommended",
+  "A person reviews it before the workflow moves on",
 ];
 
-const PIPELINE_NODES = [
-  "Existing Systems",
-  "Operational Context",
-  "AI + Business Rules",
-  "Next Action",
-  "Human Review",
-];
 
 /* ── Main component ───────────────────────────────────────────────── */
 
@@ -327,14 +321,12 @@ function WhatYouWillSeeSection() {
       <div className="wbn-combined-top">
         <div className="wbn-container">
           <h2 className="v8-section-title">
-            Three roofing workflows where better coordination can create
-            immediate operational leverage
+            Three workflows that can keep sales and production moving
           </h2>
           <p className="v8-lead" style={{ marginTop: 20, maxWidth: 700 }}>
-            Most roofing companies already have capable CRM, estimating,
-            production and accounting systems. The gap is often in what happens
-            between them — the right job surfaced to the right person when
-            something changes.
+            Most roofing companies already have the software they need. The
+            problem is what happens between systems, when the next step still
+            depends on someone noticing, checking or chasing it.
           </p>
           <div className="wbn-workflows">
             {WORKFLOWS.map((w) => (
@@ -362,8 +354,9 @@ function WhatYouWillSeeSection() {
           <h3 className="wbn-ai-headline">Where AI actually fits</h3>
           <p className="wbn-ai-intro">
             Not every step needs AI. Some actions are simple automation. AI
-            becomes useful when the workflow has to understand context before
-            deciding what deserves attention or what should happen next.
+            becomes useful when the workflow has to understand notes, documents,
+            job activity or other context before deciding what deserves
+            attention.
           </p>
           <div className="wbn-ai-flow">
             {AI_FLOW_STAGES.map((stage, i) => (
@@ -389,9 +382,8 @@ function WhatYouWillSeeSection() {
             ))}
           </div>
           <p className="wbn-ai-note">
-            The difference is not adding another tool. It is allowing the
-            systems you already use to share enough context for the workflow to
-            know what should happen next.
+            AI interprets context. Rules keep control. Automation moves the
+            work. Humans keep judgment.
           </p>
         </div>
       </div>
@@ -403,38 +395,10 @@ function WhatYouWillSeeSection() {
             See the workflow, not another slide&nbsp;deck
           </h3>
           <p className="wbn-combined-bottom-sub">
-            We will walk through a working example showing how an operational
-            event becomes context, a decision, a next action and human review.
-            The goal is to make the workflow understandable enough that you can
-            map the same logic to your own operation.
+            We&apos;ll walk through a working example from estimate to next
+            action: what changes, what the workflow picks up, what AI actually
+            interprets, and what your team sees next.
           </p>
-
-          <div className="wbn-pipeline">
-            {PIPELINE_NODES.map((label, i) => (
-              <div key={i} className="wbn-pipe-node-wrap">
-                {i > 0 && (
-                  <span className="wbn-pipe-arrow" aria-hidden="true">
-                    <svg
-                      width="20"
-                      height="10"
-                      viewBox="0 0 20 10"
-                      fill="none"
-                    >
-                      <path
-                        d="M0 5h16m0 0l-4-4m4 4l-4 4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                )}
-                <span className="wbn-pipe-node">{label}</span>
-              </div>
-            ))}
-          </div>
-          <p className="wbn-pipe-note">Your existing systems stay in place.</p>
 
           <ol className="wbn-demo-steps">
             {DEMO_STEPS.map((s, i) => (
@@ -445,18 +409,24 @@ function WhatYouWillSeeSection() {
             ))}
           </ol>
 
+          <p className="wbn-demo-followup">
+            Your existing CRM and operational systems stay in place. The point
+            is not to replace your software — it is to make the next action
+            easier to see and act on.
+          </p>
+
           <div className="wbn-takeaway">
             <p className="wbn-takeaway-title">
               Leave knowing which workflow is worth improving first
             </p>
             <p className="wbn-takeaway-sub">
-              You should leave the session able to look at your own operation
-              and identify where manual coordination, fragmented context or
-              repeated decisions make a workflow worth testing.
+              You should leave able to look at your own operation and identify
+              where manual checking, repeated handoffs or fragmented information
+              make a workflow worth improving.
             </p>
             <p className="wbn-takeaway-secondary">
-              Not a list of AI tools. A practical way to choose one operational
-              workflow with a clear business reason to improve it.
+              Not a list of AI tools. A practical way to choose one workflow
+              with a clear operational reason to fix it.
             </p>
           </div>
 
@@ -467,15 +437,15 @@ function WhatYouWillSeeSection() {
             <ul className="wbn-for-you-list">
               <li>
                 Your team already uses CRM, estimating, production or accounting
-                software, but work still gets coordinated manually between them.
+                software, but people still chase information between them.
               </li>
               <li>
                 Important follow-up or job decisions still depend on someone
-                noticing the right information at the right time.
+                noticing the right thing at the right time.
               </li>
               <li>
-                You want to understand where AI is genuinely useful before
-                buying or building another tool.
+                You want to understand where AI is useful before adding another
+                tool or project.
               </li>
             </ul>
           </div>
@@ -1120,11 +1090,11 @@ const FAQS = [
   },
   {
     q: "Is this an AI webinar?",
-    a: "AI is part of the session, but it is not the starting point. We will show where normal automation is enough, where AI can help interpret business context, and where human judgment should remain in the workflow. The focus is on improving roofing operations, not demonstrating AI for its own sake.",
+    a: "AI is part of the session, but it is not the starting point. The focus is on improving roofing operations, not demonstrating AI for its own sake. We will show where simple automation is enough and where AI adds value — and where human judgment should stay in the loop.",
   },
   {
     q: "Will this work with the systems we already use?",
-    a: "The webinar is designed around the idea that your existing systems stay in place. The examples focus on coordinating context and next actions across the tools already used in the business rather than replacing the core CRM or operational platform.",
+    a: "Your existing systems stay in place. The session focuses on coordinating information and next actions across the tools your business already uses, not replacing your CRM or operational platform.",
   },
   {
     q: "Do I need to understand AI or automation?",
@@ -1202,8 +1172,9 @@ function FinalCtaSection() {
             marginInline: "auto",
           }}
         >
-          Join the session to see the workflow in practice and leave with a
-          clearer idea of where AI and automation are worth applying first.
+          Join the session to see one workflow running in practice and leave
+          with a clearer idea of where AI and automation could be useful in
+          your own operation.
         </p>
         <p className="wbn-final-cta-meta">
           Live session · Recording included · Free to attend

@@ -1,4 +1,5 @@
 import BeeLogo from "@/components/layout/BeeLogo";
+import Footer from "@/components/layout/Footer";
 
 export default function WebinarLayout({
   children,
@@ -33,6 +34,7 @@ export default function WebinarLayout({
           </a>
         </header>
         {children}
+        <Footer />
       </div>
     </>
   );
