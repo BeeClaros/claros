@@ -1054,13 +1054,9 @@ function RegistrationSection() {
                 )}
               </button>
 
-              {/* TODO: add href to privacy policy route when /privacy or equivalent route is available */}
               <p className="wbn-privacy-note">
                 We&apos;ll use your details to manage your webinar registration
-                and send the recording.{" "}
-                <a href="#" aria-label="Privacy policy">
-                  Privacy policy
-                </a>
+                and send the recording.
               </p>
 
               <p className="wbn-form-note">
