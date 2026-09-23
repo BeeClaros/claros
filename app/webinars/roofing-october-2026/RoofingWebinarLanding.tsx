@@ -251,7 +251,7 @@ function HeroSection() {
             already use.
           </p>
           <EmailCta source="hero">Email me the webinar link</EmailCta>
-          <p className="wbn-meta">Free · Early October · Recording included</p>
+          <p className="wbn-meta">Free · Recording included</p>
           <p className="wbn-audience">
             For roofing owners, Presidents, CEOs, COOs, GMs and operations
             leaders.
@@ -373,7 +373,6 @@ function FinalCtaSection() {
         <p className="wbn-final-note">
           Can&apos;t attend live? We&apos;ll send the recording.
         </p>
-        <p className="wbn-meta">Free · Early October · Exact date TBC</p>
       </div>
     </section>
   );
@@ -610,8 +609,6 @@ function PageStyles() {
         font-size: 0.9375rem;
         color: var(--v8-text-secondary);
       }
-      .wbn-final .wbn-meta { margin-top: 6px; }
-
       .wbn-disclaimer {
         margin: 0 auto;
         padding-bottom: 28px;
