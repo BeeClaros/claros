@@ -3,26 +3,26 @@ import RoofingWebinarLanding from "./RoofingWebinarLanding";
 
 export const metadata: Metadata = {
   title:
-    "How Roofing Companies Can Remove Manual Coordination from Estimate to Production | CLAROS Webinar",
+    "Roofing Webinar: Reduce Manual Work from Estimate to Production | CLAROS",
   description:
-    "Live webinar: see three practical workflows that turn estimates, sold jobs and production signals into the right next action — without replacing the systems you already use.",
+    "Free webinar for roofing owners and operators. See practical workflows for estimate follow-up, sold-job handoff and production visibility — without replacing the systems you already use.",
   alternates: {
     canonical: "https://beeclaros.com/webinars/roofing-october-2026/",
   },
   openGraph: {
     title:
-      "How Roofing Companies Can Remove Manual Coordination from Estimate to Production",
+      "Stop Losing Time Between the Estimate and the Job | Roofing Webinar",
     description:
-      "Live webinar for roofing company owners and operations leaders. See practical workflow demonstrations for estimate follow-up, sold-job handoff and production visibility.",
+      "See 3 practical workflows for estimate follow-up, sold-job handoff and production visibility — built around the systems your roofing company already uses.",
     type: "website",
     // TODO: add webinar OG image once a suitable asset is available
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "How Roofing Companies Can Remove Manual Coordination from Estimate to Production",
+      "Stop Losing Time Between the Estimate and the Job | Roofing Webinar",
     description:
-      "Live webinar for roofing company owners and operations leaders. Practical workflow demonstrations — register for free.",
+      "A practical webinar for roofing owners and operators: estimate follow-up, production handoffs and job exceptions.",
   },
 };
 
