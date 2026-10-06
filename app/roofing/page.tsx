@@ -1,25 +1,26 @@
 import type { Metadata } from "next";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { siteConfig } from "@/config/site";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Commercial Roofing Estimating Workflows",
+  title: "Commercial Roofing Estimating Automation",
   description:
-    "CLAROS helps commercial roofing teams reduce manual work around bid intake, estimating preparation, document handling and production handoffs, using the systems already in place.",
+    "Commercial roofing estimating automation that reduces manual work around bid intake, estimating preparation, document handling and production handoffs, built around the systems already in place.",
   alternates: {
     canonical: "/roofing",
   },
   openGraph: {
     type: "website",
     url: "/roofing",
-    title: "Commercial Roofing Estimating Workflows | CLAROS",
+    title: "Commercial Roofing Estimating Automation | CLAROS",
     description:
       "Handle more bids with the estimating team you already have. CLAROS builds workflow automation around the systems commercial roofing teams already use.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Commercial Roofing Estimating Workflows | CLAROS",
+    title: "Commercial Roofing Estimating Automation | CLAROS",
     description:
       "Reduce manual work around bid intake, estimating preparation and handoffs without replacing the systems already in place.",
   },
@@ -93,12 +94,42 @@ export default function RoofingPage() {
   const contactHref =
     "mailto:hello@beeclaros.com?subject=Commercial%20roofing%20estimating%20workflow";
 
+  const serviceStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Commercial Roofing Estimating Automation",
+    serviceType: "Commercial roofing workflow automation",
+    url: `${siteConfig.url}/roofing`,
+    description:
+      "Workflow automation for commercial roofing teams that reduces manual work around bid intake, estimating preparation, document handling and production handoffs while working with the systems already in place.",
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+      email: siteConfig.email,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
+    audience: {
+      "@type": "BusinessAudience",
+      audienceType: "Commercial roofing companies",
+    },
+  };
+
   return (
     <div
       className="v8-theme"
       style={{ minHeight: "100vh", backgroundColor: "var(--v8-bg-primary)" }}
     >
       <Navigation />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(serviceStructuredData),
+        }}
+      />
 
       <main>
         <section id="top" className={styles.hero}>
