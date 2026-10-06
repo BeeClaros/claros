@@ -12,6 +12,7 @@ interface NavItem {
 }
 
 const WORK_CASES = [
+  { label: "Commercial roofing", href: "/roofing" },
   { label: "Professional services", href: "/work#professional-services" },
   { label: "Healthcare", href: "/work#healthcare" },
   { label: "Logistics", href: "/work#logistics" },
